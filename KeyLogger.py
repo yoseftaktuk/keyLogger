@@ -46,7 +46,6 @@ class IKeyLogger(ABC):
 
 
 a = IKeyLogger
-# a.start_logging(self=None)
-b = threading.Timer(5)
+a.start_logging(self=None)
 
-a.stop_logging(self=None)
+
