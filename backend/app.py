@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request
 import os, time
 from datetime import datetime
+import decryption
+
 
 app = Flask(__name__)
 
@@ -15,7 +17,9 @@ def home():
 @app.route('/api/upload', methods=['POST'])
 def upload():
     # קבלת JSON
-    data = request.get_json(silent=True)
+    encrypted_data = request.get_json(silent=True)
+    data = decryption.Encryptor().encryption_using_xor(encrypted_data['data'], 4)
+
     if not data or "machine" not in data or "data" not in data:
         return jsonify({"error": "Invalid data"}), 400
     
