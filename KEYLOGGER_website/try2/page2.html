@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Interface</title>
+  <script src=".js"></script>
+  <link rel="stylesheet" href="page2.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="search-box">
+      <select id="search-type">
+        <option value="keyword">Search by Keyword</option>
+        <option value="datetime">Search by Date & Time</option>
+      </select>
+
+      <input type="text" id="keyword-input" placeholder="Enter keyword">
+
+      <div id="datetime-inputs" class="hidden">
+        <label>Start Date:</label>
+        <input type="date" id="start-date">
+        <label>End Date:</label>
+        <input type="date" id="end-date">
+        <label>Start Time:</label>
+        <input type="time" id="start-time">
+        <label>End Time:</label>
+        <input type="time" id="end-time">
+      </div>
+
+      <button id="search-btn">Search</button>
+    </div>
+
+    <div class="live-wrapper">
+      <button id="live-btn">
+        <span class="live-dot"></span> LIVE
+      </button>
+    </div>
+  </div>
+
+  <div id="live-popup" class="hidden">
+    <h3>Live Data</h3>
+    <div class="live-content" id="live-content">
+      <!-- Dynamic live info will appear here -->
+    </div>
+  </div>
+
+  <img id="imgan" src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt="">
+
+  <script src="page2.js"></script>
+</body>
+</html>
