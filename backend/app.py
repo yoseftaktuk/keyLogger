@@ -21,13 +21,14 @@ def upload():
     
     machine = data["machine"]
     content = data["data"]
+    sent_time = data["time"]
 
     #קבלת תאריך ושעה נוכחיים
     now = datetime.now()
     year = now.strftime("%Y")
     month = now.strftime("%m")
     day = now.strftime("%d")
-    time_stamp = now.strftime("%Y-%m-%d %H:%M:%S")
+    
 
     # מבנה תיקיות: DATA_FOLDER/machine/year/month/
     machine_folder = os.path.join(DATA_FOLDER, machine, year, month)
@@ -38,7 +39,7 @@ def upload():
 
     # כתיבת הנתונים לקובץ
     with open(file_path, "a", encoding="utf-8") as f:
-        f.write(f"[{time_stamp}]  {content}\n")
+        f.write(f"[{sent_time}]  {content}\n")
 
     return jsonify({"status": "success", "file": file_path}), 200
 
