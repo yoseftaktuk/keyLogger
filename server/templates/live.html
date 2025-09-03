@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live</title>
-    <link rel="stylesheet" href="live.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='live.css') }}">
 </head>
 <body>
     <div class="live-container" id="live-container">
@@ -17,6 +17,6 @@
         ["Data 1", "Data 2", "Data 3"]
         </script>
     </div>
-    <script src="live.js"></script>
+    <script src="{{ url_for('static', filename='live.js') }}"></script>
 </body>
 </html>
