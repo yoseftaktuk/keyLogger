@@ -1,0 +1,103 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  background: #f0f0f0;
+  margin: 0;
+  padding: 40px;
+  flex-direction: row; /* משנה לטור אופקי */
+  gap: 40px; /* רווח בין הטקסט למחשבון */
+}
+
+.calculator {
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  width: 400px;
+}
+
+.display {
+  width: 90%;
+  height: 80px;
+  font-size: 36px;
+  text-align: right;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+button {
+  padding: 20px;
+  font-size: 24px;
+  border: none;
+  border-radius: 12px;
+  background: #ccc;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #3399ff;
+  color: #fff;
+}
+
+.equals {
+  grid-column: span 4;
+  background: #999;
+  color: #fff;
+}
+
+.message-box {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  max-width: 600px;
+  text-align: left;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.message-box h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.message-box p, .message-box ul {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.message-box li {
+  margin-bottom: 10px;
+}
+
+#unlockOverlay {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  font-size: 100px;
+  font-weight: bold;
+  z-index: 9999;
+  display: none;
+  transform: translateY(-50%);
+  text-align: center;
+}

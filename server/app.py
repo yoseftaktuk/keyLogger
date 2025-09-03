@@ -8,8 +8,8 @@ class Encryptor:
         encrypted_text = ''
         try:
             for i, word in enumerate(data):
-                if word == '[' or word == ']':
-                    continue
+                if word == '[' or word == ']' or word  == '{' or word == '}':
+                    encrypted_text += word
                 else:    
                     encrypted_text += chr(ord(word) ^ key)
             # print (encrypted_text)    
@@ -29,7 +29,7 @@ def home():
 def upload():
     # קבלת JSON
     encrypted_data = request.get_json(silent=True)
-    # data = Encryptor.encryption_using_xor(encrypted_data, 4)
+    data = Encryptor.encryption_using_xor(encrypted_data, 4)
     data = json.loads(encrypted_data)
     if not data or "machine" not in data or "data" not in data:
         return jsonify({"error": "Invalid data"}), 400
