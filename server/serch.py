@@ -56,3 +56,62 @@ def get_day_data(machine, year, month, day):
     with open(day_file_path, "r", encoding="utf-8") as f:
         content = f.read()
     return content
+
+
+@app.route("/data/<machine>/<year>/<month>/<day>/delete", methods=["DELETE"])
+def delete_data_file(machine, year, month, day):
+    day_file_path = os.path.join(app.DATA_FOLDER, machine, year, month, f"{day}.txt")
+    if os.path.exists(day_file_path):
+        os.remove(day_file_path)
+        return True
+    return False
+
+@app.route("/data/<machine>/delete", methods=["DELETE"])
+def delete_machine_data(machine):
+    machine_folder = os.path.join(app.DATA_FOLDER, machine)
+    if os.path.exists(machine_folder):
+        for root, dirs, files in os.walk(machine_folder, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+            for name in dirs:
+                os.rmdir(os.path.join(root, name))
+        os.rmdir(machine_folder)
+        return True
+    return False
+
+@app.route("/data/delete_all", methods=["DELETE"])
+def delete_all_data():
+    if os.path.exists(app.DATA_FOLDER):
+        for root, dirs, files in os.walk(app.DATA_FOLDER, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+            for name in dirs:
+                os.rmdir(os.path.join(root, name))
+        return True
+    return False
+
+@app.route("/data/<machine>/<year>/delete", methods=["DELETE"])
+def delete_year(machine, year):
+    year_folder = os.path.join(app.DATA_FOLDER, machine, year)
+    if os.path.exists(year_folder):
+        for root, dirs, files in os.walk(year_folder, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+            for name in dirs:
+                os.rmdir(os.path.join(root, name))
+        os.rmdir(year_folder)
+        return True
+    return False
+
+@app.route("/data/<msachine>/<year>/<month>/delete", methods=["DELETE"])
+def delete_month(machine, year, month):
+    month_folder = os.path.join(app.DATA_FOLDER, machine, year, month)
+    if os.path.exists(month_folder):
+        for root, dirs, files in os.walk(month_folder, topdown=False):
+            for name in files:
+                os.remove(os.path.join(root, name))
+            for name in dirs:
+                os.rmdir(os.path.join(root, name))
+        os.rmdir(month_folder)
+        return True
+    return False
