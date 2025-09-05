@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21dd55b2-a260-4269-a5fe-57e0f565819c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KeyLogger.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/KeyLoggerManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/KeyLoggerManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iwriter.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwriter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/serch.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/Main_page.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/static/Main_page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/static/live.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/static/live.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/templates/Main_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/server/templates/Main_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/text.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,17 +42,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.KeyLoggerManager.executor&quot;: &quot;Run&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Yosef/keylogger_porject/keyLogger&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.Enkryptor.executor": "Run",
+    "Python.KeyLoggerManager.executor": "Run",
+    "Python.app.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#1 on yosef-taktuk",
+    "last_opened_file_path": "C:/Users/Yosef/keylogger_porject/keyLogger"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

