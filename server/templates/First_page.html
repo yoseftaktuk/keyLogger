@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='First_page.css') }}">
+</head>
+<body>
+
+  <div class="message-box"> 
+    <h1>Welcome</h1>
+    <p><big>Welcome to the Calculator!</big> <br>We are happy to have you here! This calculator allows you to perform all your daily calculations easily and quickly.</p>
+    <p>Instructions for use:</p>
+    <ul>
+      <li>Click the numeric buttons to enter numbers or type using the keyboard.</li>
+      <li>Use the operators (+, -, ×, ÷) to perform calculations.</li>
+      <li>Click the '.' button to add decimal points to numbers.</li>
+      <li>Press 'Clear' to reset the display at any time.</li>
+      <li>Press '=' or 'Enter' to get the result of your calculation.</li>
+      <li>Use 'Backspace' to delete the last digit.</li>
+    </ul>
+    <p>Enjoy smooth, fast, and easy computing with our calculator. Whether you are doing simple arithmetic or more complex operations, this calculator is designed to make your experience as convenient as possible.</p>
+  </div>
+
+  <div id="unlockOverlay">UNLOCK</div>
+
+  <div class="calculator">
+    <input type="text" id="display" class="display" disabled>
+    <div class="buttons">
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('/')">÷</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('*')">×</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('-')">−</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="clearDisplay()">Clear</button>
+      <button onclick="append('+')">+</button>
+
+      <button id="equalsBtn" onclick="calculate()" class="equals">=</button>
+    </div>
+  </div>
+  
+  <script src="{{ url_for('static', filename='First_page.js') }}"></script>
+</body>
+</html>
