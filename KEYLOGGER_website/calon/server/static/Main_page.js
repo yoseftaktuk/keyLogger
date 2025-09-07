@@ -29,8 +29,10 @@ submitMachineName.addEventListener('click', async () => {
         console.log(data);
 
     } catch (error) {
-        console.error("Fetch error: ", error);
-    }
+    console.error("Fetch error: ", error.message, error);
+    alert("Fetch failed: " + error.message);
+}
+
 
     if (name) {
         let machines = JSON.parse(localStorage.getItem('machines')) || [];
