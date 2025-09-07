@@ -73,7 +73,8 @@ content.innerHTML = `<h2>בחירה 3</h2><p>תוכן עבור בחירה 3 — 
 
 const btn4 = document.getElementById('btn4');
 btn4.addEventListener('click', () => {
-   content.innerHTML = `<h2>בחירה</h2><input id='mechina_name' type="text" placeholder="הכנס שם מחשב"> <button id='send' type='submit'>לחץ כאן</button>`;
+   content.innerHTML = `<h2>בחירה</h2><input id='mechina_name' type="text" 
+   placeholder="הכנס שם מחשב"> <button id='send' type='submit'>לחץ כאן</button>`;
 
 
 buttons.forEach((btn, i) => btn.addEventListener('click', () => setActive(i)))
@@ -81,7 +82,40 @@ buttons.forEach((btn, i) => btn.addEventListener('click', () => setActive(i)))
 const send = document.getElementById('send')
 
 const mechina_name = document.getElementById('mechina_name')
-send.addEventListener('click', () =>{
-    const response = fetch(`http://127.0.0.1:5000/data/${mechina_name}/years`)
-})
-})
+
+
+send.addEventListener('click', async () => {
+    const value = mechina_name.value.trim();
+
+    if (!value) {
+        alert('הכנס שם מחשב');
+        return;
+    }
+
+    try {
+        const res = await fetch(`http://127.0.0.1:5000/data/${value}/years`);
+        const data = await res.json(); // JSON מהשרת
+
+        // ניצור כפתור שמכיל את התשובה
+        content.innerHTML = `<button id='send1' type='button'>${JSON.stringify(data)}</button>`;
+
+        // עכשיו הכפתור קיים, אפשר להביא אותו
+        const btn_in_years = document.getElementById('send1');
+
+        // אם data הוא מחרוזת/מספר – אפשר לשמור אותו כערך
+        btn_in_years.dataset.years = data; 
+
+        btn_in_years.addEventListener('click', async () => {
+            const years = btn_in_years.dataset.years; // שולפים מה-data attribute
+            try {
+                const res2 = await fetch(`http://127.0.0.1:5000/data/${value}/${years}/months`);
+                const months = await res2.json();
+                content.innerHTML = `<pre>${JSON.stringify(months, null, 2)}</pre>`;
+            } catch (err) {
+                console.error("Error fetching months:", err);
+            }
+        });
+}
+ catch (err) {console.error("Error fetching years:", err);
+    }
+})});

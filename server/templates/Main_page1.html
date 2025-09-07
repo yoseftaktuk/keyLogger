@@ -4,26 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive & Live</title>
-    <link rel="stylesheet"  href="{{ url_for('static', filename='Main_page.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Main_page.css') }}">
 </head>
-
 <body>
-    <a href="http://127.0.0.1:5000/machine"><button type="submit"  id="send" >machine</button></a>
     <div class="categories-bar">
-    <div class="category">Most Frequent Words</div>
-    <div class="category">passwords</div>
-    <div class="category">Language</div>
-    
-    <a href="http://127.0.0.1:5000/api/live" class="live-button" id="butten0">
-        LIVE
-        <span class="live-dot"></span>
-    </a>
-    
-    <div class="category">Keywords/Tags</div>
-    <div class="category">Source/Website</div>
-    <div class="category">@email</div>
-</div>
-
+        <button class="category">Most Frequent Words</button>
+        <button class="category">passwords</button>
+        <button class="category">Language</button>
+        <a href="live.html" class="live-button">
+            LIVE
+            <span class="live-dot"></span>
+        </a>
+        <button class="category">Keywords/Tags</button>
+        <button class="category">Source/Website</button>
+        <button class="category">@email</button>
+    </div>
 
     <div class="right-side">
         <h2>Archive</h2>
