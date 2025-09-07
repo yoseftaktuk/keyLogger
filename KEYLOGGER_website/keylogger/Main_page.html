@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive & Live</title>
-    <link rel="stylesheet" href="Main_page.css">
+   <link rel="stylesheet" href="{{ url_for('static', filename='Main_page.css') }}">
 </head>
 <body>
     <div class="modal-overlay" id="machineNameModal">
@@ -53,6 +53,6 @@
 
     <img src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt="">
 
-    <script src="Main_page.js"></script>
+   <script src="{{ url_for('static', filename='Main_page.js') }}"></script>
 </body>
 </html>
