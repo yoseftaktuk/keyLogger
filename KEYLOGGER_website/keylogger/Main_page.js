@@ -1,3 +1,47 @@
+const modal = document.getElementById('machineNameModal');
+const machineNameInput = document.getElementById('machineNameInput');
+const machinesList = document.getElementById('machinesList');
+const submitMachineName = document.getElementById('submitMachineName');
+const errorMsg = document.getElementById('errorMsg');
+
+function loadSavedMachines() {
+    let machines = JSON.parse(localStorage.getItem('machines')) || [];
+
+    if (!machines.includes("test")) {
+        machines.push("test");
+        localStorage.setItem('machines', JSON.stringify(machines));
+    }
+
+    machinesList.innerHTML = "";
+    machines.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        machinesList.appendChild(option);
+    });
+}
+
+submitMachineName.addEventListener('click', () => {
+    const name = machineNameInput.value.trim();
+    if (name) {
+        let machines = JSON.parse(localStorage.getItem('machines')) || [];
+        if (!machines.includes(name)) {
+            machines.push(name);
+            localStorage.setItem('machines', JSON.stringify(machines));
+        }
+        modal.style.display = 'none';
+    } else {
+        errorMsg.style.display = 'block';
+    }
+});
+
+machineNameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        submitMachineName.click();
+    }
+});
+
+loadSavedMachines();
+
 const archiveData = [
     {date: "2025-08-31", time: "13:00", content: "Content item 1"},
     {date: "2025-08-31", time: "14:30", content: "Content item 2"},
@@ -36,5 +80,3 @@ document.getElementById("search-button").addEventListener("click", () => {
 
     displayResults(filtered);
 });
-
-
