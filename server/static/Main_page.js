@@ -21,17 +21,21 @@ function loadSavedMachines() {
 }
 
 submitMachineName.addEventListener('click', async () => {
+    while(true){
     const name = machineNameInput.value.trim();
     try {
         const response = await fetch(`http://127.0.0.1:5000/data/${name}/years`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         console.log(data);
-
+        
+            
     } catch (error) {
         console.error("Fetch error: ", error);
-    }
-
+         }
+    if (data === 'Machine not found'){
+            continue}
+         else{   
     if (name) {
         let machines = JSON.parse(localStorage.getItem('machines')) || [];
         if (!machines.includes(name)) {
@@ -42,7 +46,8 @@ submitMachineName.addEventListener('click', async () => {
     } else {
         errorMsg.style.display = 'block';
     }
-});
+    break}
+}});
 
 machineNameInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {

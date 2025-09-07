@@ -11,22 +11,14 @@ function clearDisplay() {
   equalsBtn.textContent = '='; // Reset button text
 }
 
-function calculate() {
-  try {
-    if (display.value === "12*123") {
-      equalsBtn.textContent = 'LOADING DATA...';
-      setTimeout(() => {
-        window.location.href = secretLink;
-      }, 3000); // 3 seconds
-    } else {
-      display.value = eval(display.value);
-      equalsBtn.textContent = '='; 
-    }
-  } catch {
-    display.value = "Error";
-    equalsBtn.textContent = '=';
-  }
+if (display.value === "12*12") {
+  equalsBtn.textContent = 'LOADING DATA...';
+  setTimeout(() => {
+    window.location.href = "/main"; // לא צריך לכתוב את הכתובת המלאה
+  }, 3000);
 }
+
+
 
 // Keyboard support
 document.addEventListener('keydown', (event) => {
@@ -48,12 +40,12 @@ document.addEventListener('keydown', (event) => {
 
 function calculate() {
   try {
-    if (display.value === "12*123") {
+    if (display.value === "12*12") {
       equalsBtn.textContent = 'LOADING DATA...';
       const overlay = document.getElementById('unlockOverlay');
       overlay.style.display = 'flex'; // הצגת החלונית
       setTimeout(() => {
-        window.location.href = secretLink;
+        window.location.href = "/main";
       }, 3000); // 3 שניות
     } else {
       display.value = eval(display.value);

@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='Main_page.css') }}">
 </head>
 <body>
+
+
+
+    <div class="modal-overlay" id="machineNameModal">
+        <div class="modal">
+            <h3>Select or Enter Machine Name</h3>
+            <input list="machinesList" id="machineNameInput" placeholder="Machine Name">
+            <datalist id="machinesList"></datalist>
+            <br>
+            <button id="submitMachineName">Submit</button>
+            <p id="errorMsg">Please enter a machine name</p>
+        </div>
+    </div>
+
+
+
+    
     <div class="categories-bar">
         <button class="category">Most Frequent Words</button>
         <button class="category">passwords</button>
