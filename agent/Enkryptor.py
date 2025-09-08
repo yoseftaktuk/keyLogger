@@ -1,6 +1,7 @@
 #התוכנה שמצפינה
 import base64
-class Encryptor:
+from EnkryptorADS import Encryptor
+class Encryptor(Encryptor):
     def encryption_using_xor(self,data,key):
         encrypted_bytes = ''
         try:

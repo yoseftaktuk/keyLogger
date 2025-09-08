@@ -8,3 +8,4 @@ class Encryptor:
             return base64.b64encode(encrypted_bytes).decode("utf-8")
         except:
              return encrypted_bytes
+        
