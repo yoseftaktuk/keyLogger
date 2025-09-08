@@ -49,10 +49,10 @@ def upload():
 
     # קובץ יומי: day.txt
     file_path = os.path.join(machine_folder, f"{day}.txt")
-
+    content = jsonify({'time':now, 'data':content})
     # כתיבת הנתונים לקובץ
-    with open(file_path, "a", encoding="utf-8") as f:
-        f.write(f"[{sent_time}]  {content}\n")
+    with open(file_path, "a", encoding="utf-8") as f:  
+        f.write(content)
 
     return jsonify({"status": "success", "file": file_path}), 200
 
@@ -115,21 +115,29 @@ def get_days_list(machine, year, month):
             days.append(day_file[:-4])  # Remove .txt extension
     return json.dumps(days)
 
+
 @app.route("/data/<machine>/<year>/<month>/<day>")
 def get_day_data(machine, year, month, day):
     global DATA_FOLDER    
     day_file_path = os.path.join(DATA_FOLDER, machine, year, month, f"{day}.txt")
-    if not os.path.exists(day_file_path):
-        return "Day not found", 404
 
+    # אם הקובץ לא קיים
+    if not os.path.exists(day_file_path):
+        return jsonify({"error": "Day not found"}), 404
+
+    # קריאת התוכן
     with open(day_file_path, "r", encoding="utf-8") as f:
         content = f.read()
-        data = ''  
-    for i in range (len(jsonify(content))):
-        i += 27
-        data
 
-    return jsonify(content)
+    # מחזירים JSON מסודר
+    return jsonify({
+        "machine": machine,
+        "year": year,
+        "month": month,
+        "day": day,
+        "content": content
+    })
+
 
 
 @app.route("/data/<machine>/<year>/<month>/<day>/delete", methods=["DELETE"])
@@ -254,15 +262,15 @@ def collect_data(start, end):
                                     })
                             except:
                                 pass
-
-    return jsonify(sorted(result, key=lambda x: x["datetime"]))
+    return jsonify(result)                            
+    return jsonify(sorted(result, key=lambda x: x["datetime"]),'aaaaaaa')
 
 from collections import Counter
 import re
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/most_frequent/<machine>/<year>/<month>/<day>")
-def most_frequent_word(machine, year, month, day):
+def most_frequent_word(machine, year, month,day):
     # בונים נתיב לקובץ
     file_path = os.path.join(DATA_FOLDER, machine, year, month, day)
 
