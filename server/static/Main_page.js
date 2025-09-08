@@ -178,10 +178,22 @@ btnYears.addEventListener('click', async () => {
 
                                             const dayContent = await respDayData.json();
                                             const dayContainer = document.getElementById('dayContainer');
-                                            dayContainer.innerHTML = `<pre style="background:#f0f0f0; padding:10px; border-radius:5px;">${dayContent}</pre>`;
+                                            console.log(dayContent)
+                                            console.log(dayContent['content']);
+                                                
+
+                                            dayContainer.innerHTML = `
+                                            <pre style="background:#f0f0f0; padding:10px; border-radius:5px;">
+                                                ${JSON.stringify(dayContent['content'], null, 2)}
+                                            </pre>
+                                        `;
+
+                                            
+                                            dayContainer.innerText = `<h2>${json(dayContent['content'])}</h2>`;
+                                            //`<pre style="background:#f0f0f0; padding:10px; border-radius:5px;">${json(dayContent['content'])}</pre>`;
 
                                         } catch (error) {
-                                            console.error("Error fetching day content:", error);
+                                            //console.log("Error fetching day data:");
                                         }
                                     });
                                 });

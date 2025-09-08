@@ -26,7 +26,7 @@ def upload():
     encrypted_data = request.get_json(silent=True)
     encrypted_data = json.loads(encrypted_data)
     #ביטול ההצפנה
-    data = json.loads(Encryptor.encryption_using_xor(encrypted_data['data'],4))
+    data = json.loads(a.encryption_using_xor(encrypted_data['data'],4))
     if not data or "machine" not in data or "data" not in data:
         return jsonify({"error": "Invalid data"}), 400
     
@@ -41,6 +41,7 @@ def upload():
     year = now.strftime("%Y")
     month = now.strftime("%m")
     day = now.strftime("%d")
+    now = now.strftime("%H:%M:%S")
     
 
     # מבנה תיקיות: DATA_FOLDER/machine/year/month/
@@ -49,7 +50,7 @@ def upload():
 
     # קובץ יומי: day.txt
     file_path = os.path.join(machine_folder, f"{day}.txt")
-    content = jsonify({'time':now, 'data':content})
+    content = json.dumps({'time':now, 'data':content})
     # כתיבת הנתונים לקובץ
     with open(file_path, "a", encoding="utf-8") as f:  
         f.write(content)
