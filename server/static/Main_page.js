@@ -1,27 +1,61 @@
-const butten = document.getElementById('butten')
+const modal = document.getElementById('machineNameModal');
+const machineNameInput = document.getElementById('machineNameInput');
+const machinesList = document.getElementById('machinesList');
+const submitMachineName = document.getElementById('submitMachineName');
+const errorMsg = document.getElementById('errorMsg');
 
+function loadSavedMachines() {
+    let machines = JSON.parse(localStorage.getItem('machines')) || [];
 
-      const btn = document.getElementById("send");
-      const resultDiv = document.getElementById("result");
-btn.onclick = async function(){ 
-    window.location.href = "http://127.0.0.1:5000/machine"     
-     ;
-     
+    if (!machines.includes("test")) {
+        machines.push("test");
+        localStorage.setItem('machines', JSON.stringify(machines));
+    }
+
+    machinesList.innerHTML = "";
+    machines.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        machinesList.appendChild(option);
+    });
 }
 
-       
-     
+submitMachineName.addEventListener('click', async () => {
+    while(true){
+    const name = machineNameInput.value.trim();
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/data/${name}/years`);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        console.log(data);
+        
+            
+    } catch (error) {
+        console.error("Fetch error: ", error);
+         }
+    if (data === 'Machine not found'){
+            continue}
+         else{   
+    if (name) {
+        let machines = JSON.parse(localStorage.getItem('machines')) || [];
+        if (!machines.includes(name)) {
+            machines.push(name);
+            localStorage.setItem('machines', JSON.stringify(machines));
+        }
+        modal.style.display = 'none';
+    } else {
+        errorMsg.style.display = 'block';
+    }
+    break}
+}});
 
-// search.addEventListener("click", async () => {
-//   try {
-//     // שולחים בקשת GET לשרת
-//     const response = await fetch("http://127.0.0.1:5000/machine");
-    
-//   } catch (error) {
-//     console.error("שגיאה בבקשת GET:", error);
-//   }
-// });
+machineNameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        submitMachineName.click();
+    }
+});
 
+loadSavedMachines();
 
 const archiveData = [
     {date: "2025-08-31", time: "13:00", content: "Content item 1"},

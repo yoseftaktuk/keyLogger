@@ -14,6 +14,12 @@ os.makedirs(DATA_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
+
+    return render_template('First_page.html')
+
+@app.route('/main')
+def main():
+
     return render_template('Main_page.html')
 
 @app.route('/api/keylogges', methods=['POST'])
