@@ -166,14 +166,18 @@ def delete_machine_data(machine):
 
 @app.route("/data/delete_all", methods=["DELETE"])
 def delete_all_data():
-    if os.path.exists(DATA_FOLDER):
-        for root, dirs, files in os.walk(DATA_FOLDER, topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                os.rmdir(os.path.join(root, name))
-        return True
-    return False
+    try:
+        if os.path.exists(DATA_FOLDER):
+            for root, dirs, files in os.walk(DATA_FOLDER, topdown=False):
+                for name in files:
+                    os.remove(os.path.join(root, name))
+                for name in dirs:
+                    os.rmdir(os.path.join(root, name))
+            return jsonify({"success": True, "message": "All data deleted."}), 200
+        else:
+            return jsonify({"success": False, "message": "Data folder not found."}), 404
+    except Exception as e:
+        return jsonify({"success": False, "message": f"Error occurred: {str(e)}"}), 500
 
 
 import shutil
