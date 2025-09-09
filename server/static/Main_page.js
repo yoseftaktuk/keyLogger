@@ -1,3 +1,5 @@
+// ----------------- Main JS for Archive & Live -----------------
+
 const modal = document.getElementById('machineNameModal');
 const machineNameInput = document.getElementById('machineNameInput');
 const machinesList = document.getElementById('machinesList');
@@ -8,6 +10,7 @@ const yearsList = document.getElementById('yearsList');
 const archiveContainer = document.getElementById('archive-results');
 const btnYears = document.getElementById('get_years');
 
+// Load saved machine names
 function loadSavedMachines() {
     let machines = JSON.parse(localStorage.getItem('machines')) || [];
     machinesList.innerHTML = '';
@@ -19,6 +22,7 @@ function loadSavedMachines() {
 }
 loadSavedMachines();
 
+// Submit machine name
 submitMachineName.addEventListener('click', async () => {
     const machineName = machineNameInput.value.trim();
     if (!machineName) {
@@ -31,7 +35,6 @@ submitMachineName.addEventListener('click', async () => {
             errorMsg.style.display = 'block';
             return;
         }
-        const years = await response.json();
         let machines = JSON.parse(localStorage.getItem('machines')) || [];
         if (!machines.includes(machineName)) {
             machines.push(machineName);
@@ -47,6 +50,7 @@ machineNameInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') submitMachineName.click();
 });
 
+// Sample archive data
 const archiveData = [
     {date: '2025-08-31', time: '13:00', content: 'Content item 1'},
     {date: '2025-08-31', time: '14:30', content: 'Content item 2'},
@@ -68,6 +72,7 @@ function displayResults(results) {
     });
 }
 
+// Search button
 document.getElementById('search-button').addEventListener('click', () => {
     const startDate = document.getElementById('start-date').value;
     const startTime = document.getElementById('start-time').value || '00:00';
@@ -86,6 +91,7 @@ document.getElementById('search-button').addEventListener('click', () => {
     displayResults(filtered);
 });
 
+// Years button
 btnYears.addEventListener('click', async () => {
     const machineName = machineNameInput.value.trim();
     if (!machineName) {
@@ -94,10 +100,7 @@ btnYears.addEventListener('click', async () => {
     }
     try {
         const response = await fetch(`http://127.0.0.1:5000/data/${machineName}/years`);
-        if (!response.ok) {
-            errorMsg.style.display = 'block';
-            return;
-        }
+        if (!response.ok) { errorMsg.style.display = 'block'; return; }
         const years = await response.json();
         yearsList.innerHTML = '';
         years.forEach(year => {
@@ -112,9 +115,7 @@ btnYears.addEventListener('click', async () => {
                     const months = await respMonths.json();
                     yearsModal.innerHTML = `
                         <h3>Months for ${year}</h3>
-                        <div id="monthsContainer">
-                            ${months.map(m => `<button class="month-btn">${m}</button>`).join('')}
-                        </div>
+                        <div id="monthsContainer">${months.map(m => `<button class="month-btn">${m}</button>`).join('')}</div>
                         <div id="dayContainer"></div>
                     `;
                     document.querySelectorAll('.month-btn').forEach(monthBtn => {
@@ -126,13 +127,11 @@ btnYears.addEventListener('click', async () => {
                                 const respDays = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/${month}/days`);
                                 if (!respDays.ok) return;
                                 const days = await respDays.json();
-                                const dayButtons = days.map(day => `<button class="day-btn" style="padding:5px 10px; border-radius:5px; border:1px solid #333; cursor:pointer;">${day}</button>`).join('');
+                                const dayButtons = days.map(day => `<button class="day-btn">${day}</button>`).join('');
                                 yearsModal.innerHTML = `
                                     <h3>Days for ${year}-${month}</h3>
-                                    <div id="dayContainer" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px;">
-                                        ${dayButtons}
-                                    </div>
-                                    <pre id="dayContent" style="background:#f0f0f0; padding:10px; border-radius:5px; max-height:240px; overflow:auto;"></pre>
+                                    <div id="dayContainer">${dayButtons}</div>
+                                    <pre id="dayContent"></pre>
                                 `;
                                 document.querySelectorAll('.day-btn').forEach(dayBtn => {
                                     dayBtn.addEventListener('click', async () => {
@@ -144,46 +143,99 @@ btnYears.addEventListener('click', async () => {
                                             if (!respDayData.ok) return;
                                             const txt = await respDayData.text();
                                             const safe = txt.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
-                                            const pre = document.getElementById('dayContent');
-                                            if (pre) pre.innerHTML = safe;
-                                        } catch (e) {}
+                                            document.getElementById('dayContent').innerHTML = safe;
+                                        } catch(e) {}
                                     });
                                 });
-                            } catch (e) {}
+                            } catch(e){}
                         });
                     });
-                } catch (e) {}
+                } catch(e){}
             });
             yearsList.appendChild(li);
         });
         yearsModal.style.display = 'block';
-    } catch (e) {}
+    } catch(e){}
 });
 
-// Self-destruction button 
-const selfDestructBtn = document.getElementById("self-destruct");
+// ---------------- Source/Website/path modal ----------------
+const extractLinkBtn = document.getElementById('extractLinkBtn');
 
-selfDestructBtn.addEventListener("click", async () => {
-    const confirmDelete = confirm("Are you sure you want to delete all data?");
-    if (!confirmDelete) return;
+let bottomLinksModal = document.createElement('div');
+bottomLinksModal.id = 'bottomLinksModal';
+bottomLinksModal.style.position = 'fixed';
+bottomLinksModal.style.bottom = '-250px';
+bottomLinksModal.style.left = '0';
+bottomLinksModal.style.width = '100%';
+bottomLinksModal.style.maxHeight = '250px';
+bottomLinksModal.style.backgroundColor = '#fff';
+bottomLinksModal.style.borderTop = '2px solid #333';
+bottomLinksModal.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.3)';
+bottomLinksModal.style.overflowY = 'auto';
+bottomLinksModal.style.padding = '10px 20px';
+bottomLinksModal.style.zIndex = 9999;
+bottomLinksModal.style.transition = 'bottom 0.4s ease-in-out';
+bottomLinksModal.style.fontSize = '18px';
+bottomLinksModal.style.fontFamily = 'Arial, sans-serif';
 
+// Title
+let modalTitle = document.createElement('div');
+modalTitle.textContent = 'Extracted Links';
+modalTitle.style.fontWeight = 'bold';
+modalTitle.style.fontSize = '20px';
+modalTitle.style.marginBottom = '10px';
+bottomLinksModal.appendChild(modalTitle);
+
+// Close button
+let closeBtn = document.createElement('button');
+closeBtn.textContent = 'Close';
+closeBtn.style.float = 'right';
+closeBtn.style.marginBottom = '5px';
+closeBtn.style.cursor = 'pointer';
+closeBtn.addEventListener('click', () => { bottomLinksModal.style.bottom = '-250px'; });
+bottomLinksModal.appendChild(closeBtn);
+
+// Links container
+let linksList = document.createElement('div');
+linksList.style.clear = 'both';
+bottomLinksModal.appendChild(linksList);
+
+document.body.appendChild(bottomLinksModal);
+
+extractLinkBtn.addEventListener('click', async () => {
+    const pre = document.getElementById('dayContent');
+    if (!pre || !pre.textContent.trim()) {
+        linksList.innerHTML = '<p>No text available to extract links.</p>';
+        bottomLinksModal.style.bottom = '0';
+        return;
+    }
+    const textToCheck = pre.textContent.trim();
     try {
-        const response = await fetch("/data/delete_all", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            }
+        const response = await fetch('http://127.0.0.1:5000/extract_link', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: textToCheck })
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            alert(result.message); // "All data deleted."
-        } else {
-            alert("Error: " + result.message);
-        }
-    } catch (error) {
-        alert("Request failed: " + error.message);
+        if (!response.ok) { linksList.innerHTML = '<p>Error fetching links.</p>'; bottomLinksModal.style.bottom='0'; return; }
+        const data = await response.json();
+        linksList.innerHTML = '';
+        if (data.links && data.links.length > 0) {
+            data.links.forEach(link => {
+                let a = document.createElement('a');
+                a.href = link.startsWith('http') ? link : 'https://' + link;
+                a.textContent = link;
+                a.target = '_blank';
+                a.style.display = 'block';
+                a.style.marginBottom = '5px';
+                linksList.appendChild(a);
+            });
+        } else { linksList.innerHTML = '<p>No links found.</p>'; }
+        bottomLinksModal.style.bottom = '0';
+    } catch(e) {
+        console.error(e);
+        linksList.innerHTML = '<p>Error connecting to server.</p>';
+        bottomLinksModal.style.bottom = '0';
     }
 });
+
 
