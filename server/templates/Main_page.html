@@ -27,14 +27,13 @@
             <span class="live-dot"></span>
         </a>
         <button class="category">@Email</button>
-
-        <button class="category">Source/Website</button>
-        <button id="self-destruct" class="category">self-destruct</button>
-
+        <button id="extractLinkBtn" class="category">Source/Website/path</button>
+        <button class="category"><self-destruction>self-destruction</self-destruction></button>
     </div>
 
     <div class="right-side">
         <h2>Archive</h2>
+
         <div class="search-form">
             <img class="search-icon left" src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt="icon">
             <div class="search-row">
@@ -52,6 +51,7 @@
             <button class="search-button" id="search-button">Search</button>
             <img class="search-icon right" src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt="icon">
         </div>
+
         <div class="archive-results" id="archive-results"></div>
     </div>
 
@@ -59,6 +59,10 @@
         <h4>Years</h4>
         <ul id="yearsList"></ul>
     </div>
+
+    <script src="{{ url_for('static', filename='Main_page.js') }}"></script>
+</body>
+</html>
 
     <script src="{{ url_for('static', filename='Main_page.js') }}"></script>
 </body>
