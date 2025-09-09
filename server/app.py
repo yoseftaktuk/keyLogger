@@ -308,3 +308,28 @@ def most_frequent_word(machine, year, month,day):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+from flask import Flask, request, jsonify
+import re
+
+app = Flask(__name__)
+
+def extract_links(text):
+    url_pattern = r"""
+        (?:(?:https?://)|(?:www\.))?
+        [\w\-]+(?:\.[\w\-]+)+
+        (?:[\w\-\._~:/?#[\]@!$&'()*+,;=%]*)
+    """
+    matches = re.findall(url_pattern, text, re.IGNORECASE | re.VERBOSE)
+    return list(set(matches))
+
+@app.route('/extract_link', methods=['POST'])
+def extract_link():
+    data = request.json
+    text = data.get('text', '')
+    links = extract_links(text)
+    return jsonify({'links': links})
+
+if __name__ == '__main__':
+    app.run(debug=True)

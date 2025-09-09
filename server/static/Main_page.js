@@ -159,3 +159,79 @@ btnYears.addEventListener('click', async () => {
         yearsModal.style.display = 'block';
     } catch (e) {}
 });
+
+// ---------------- Source/Website/path (animated bottom modal) ----------------
+const extractLinkBtn = document.getElementById('extractLinkBtn');
+
+let bottomLinksModal = document.createElement('div');
+bottomLinksModal.id = 'bottomLinksModal';
+bottomLinksModal.style.position = 'fixed';
+bottomLinksModal.style.bottom = '-220px';
+bottomLinksModal.style.left = '0';
+bottomLinksModal.style.width = '100%';
+bottomLinksModal.style.maxHeight = '200px';
+bottomLinksModal.style.backgroundColor = '#fff';
+bottomLinksModal.style.borderTop = '2px solid #333';
+bottomLinksModal.style.boxShadow = '0 -2px 10px rgba(0,0,0,0.3)';
+bottomLinksModal.style.overflowY = 'auto';
+bottomLinksModal.style.padding = '10px';
+bottomLinksModal.style.zIndex = 9999;
+bottomLinksModal.style.transition = 'bottom 0.4s ease-in-out';
+
+let closeBtn = document.createElement('button');
+closeBtn.textContent = 'Close';
+closeBtn.style.float = 'right';
+closeBtn.style.marginBottom = '5px';
+closeBtn.addEventListener('click', () => {
+    bottomLinksModal.style.bottom = '-220px';
+});
+
+let linksList = document.createElement('div');
+bottomLinksModal.appendChild(closeBtn);
+bottomLinksModal.appendChild(linksList);
+
+document.body.appendChild(bottomLinksModal);
+
+extractLinkBtn.addEventListener('click', async () => {
+    const pre = document.getElementById('dayContent');
+    if (!pre || !pre.textContent.trim()) {
+        linksList.innerHTML = '<p>No text available to extract links.</p>';
+        bottomLinksModal.style.bottom = '0';
+        return;
+    }
+    const textToCheck = pre.textContent.trim();
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/extract_link', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: textToCheck })
+        });
+        if (!response.ok) {
+            linksList.innerHTML = '<p>Error fetching links from server.</p>';
+            bottomLinksModal.style.bottom = '0';
+            return;
+        }
+        const data = await response.json();
+        linksList.innerHTML = '';
+
+        if (data.links && data.links.length > 0) {
+            data.links.forEach(link => {
+                let a = document.createElement('a');
+                a.href = link.startsWith('http') ? link : 'https://' + link;
+                a.textContent = link;
+                a.target = '_blank';
+                a.style.display = 'block';
+                a.style.marginBottom = '3px';
+                linksList.appendChild(a);
+            });
+        } else {
+            linksList.innerHTML = '<p>No links found in the text.</p>';
+        }
+        bottomLinksModal.style.bottom = '0';
+    } catch (e) {
+        console.error(e);
+        linksList.innerHTML = '<p>Error connecting to server.</p>';
+        bottomLinksModal.style.bottom = '0';
+    }
+});
