@@ -159,3 +159,31 @@ btnYears.addEventListener('click', async () => {
         yearsModal.style.display = 'block';
     } catch (e) {}
 });
+
+// Self-destruction button 
+const selfDestructBtn = document.getElementById("self-destruct");
+
+selfDestructBtn.addEventListener("click", async () => {
+    const confirmDelete = confirm("Are you sure you want to delete all data?");
+    if (!confirmDelete) return;
+
+    try {
+        const response = await fetch("/data/delete_all", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message); // "All data deleted."
+        } else {
+            alert("Error: " + result.message);
+        }
+    } catch (error) {
+        alert("Request failed: " + error.message);
+    }
+});
+
