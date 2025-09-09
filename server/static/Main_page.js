@@ -159,12 +159,8 @@ btnYears.addEventListener('click', async () => {
         yearsModal.style.display = 'block';
     } catch (e) {}
 });
-const selct = document.getElementById('list') 
 
-selct.addEventListener('click', () => {
-    dropdown.classList.toggle("show");
-    selct.classList = machinesList
-  });
+  
 
 document.getElementById("search-button").addEventListener("click", async () => {
     const startDate = document.getElementById("start-date").value;
@@ -225,6 +221,7 @@ const dropdown = document.getElementById('machines_dropdown');
 const output = document.getElementById('machines_output');
 const arrow = document.getElementById('arrow');
 
+
 button.addEventListener('click', function() {
     if (dropdown.classList.contains('show')) {
         dropdown.classList.remove('show');
@@ -239,6 +236,16 @@ button.addEventListener('click', function() {
             data.forEach(machine => {
                 const li = document.createElement('li');
                 li.textContent = machine;
+
+                // מאזין ללחיצה על כל מכונה
+                li.addEventListener('click', () => {
+                    machineNameInput.value = machine; // העתקת השם ל-input
+                    dropdown.classList.remove('show'); // סוגר את הרשימה
+                    arrow.classList.remove('open');
+                    console.log(machineNameInput)
+                    console.log(machineNameInput.value)
+                });
+
                 output.appendChild(li);
             });
 
@@ -253,5 +260,60 @@ document.addEventListener('click', function(event) {
     if (!dropdown.contains(event.target) && event.target !== button) {
         dropdown.classList.remove('show');
         arrow.classList.remove('open');
+    }
+});
+
+const selct = document.getElementById('list') 
+
+selct.addEventListener('click', async() => {
+    response = await fetch()
+});
+
+
+
+
+const listBtn = document.getElementById('list');
+const machinesContainer = document.getElementById('machinesContainer');
+
+
+listBtn.addEventListener('click', async () => {
+    try {
+        // קבלת רשימת השנים של כל המכונות (כאן בעצם "מכונות קיימות")
+        const response = await fetch('/machines'); // אם אין נתיב כזה, אפשר להשתמש ב: fetch('/data') עם שינוי Flask
+        if (!response.ok) throw new Error(await response.text());
+        const machines = await response.json();
+
+        machinesList.innerHTML = '';
+        machines.forEach(machine => {
+            const li = document.createElement('li');
+            li.textContent = machine;
+            li.style.cursor = 'pointer';
+            li.style.padding = '5px';
+            li.style.borderBottom = '1px solid #ccc';
+
+            li.addEventListener('click', async () => {
+                const confirmDelete = confirm(`אתה בטוח שאתה רוצה למחוק את המכונה: ${machine}?`);
+                if (!confirmDelete) return;
+
+                try {
+                    const delResp = await fetch(`/data/${machine}/delete`, { method: 'DELETE' });
+                    const result = await delResp.json();
+                    if (!delResp.ok) throw new Error(result.error || 'Error');
+                    alert(result.message);
+                    li.remove(); // מסיר את המכונה מהרשימה
+                } catch (err) {
+                    console.error(err);
+                    alert('קרתה שגיאה בעת המחיקה');
+                }
+            });
+
+            machinesList.appendChild(li);
+        });
+
+        machinesContainer.style.display = 'block';
+
+    } catch (err) {
+        console.error('Error fetching machines:', err);
+        alert('לא ניתן להביא את רשימת המכונות');
     }
 });

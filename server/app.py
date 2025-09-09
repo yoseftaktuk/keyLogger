@@ -323,5 +323,23 @@ def most_frequent_word(machine, year, month,day):
         "frequency": freq
     })
 
+
+
+
+
+# @app.route("/data/<machine>/delete1", methods=["DELETE"])
+# def delete_machine_data(machine):
+#     machine_folder = os.path.join(DATA_FOLDER, machine)
+#     if os.path.exists(machine_folder):
+#         for root, dirs, files in os.walk(machine_folder, topdown=False):
+#             for name in files:
+#                 os.remove(os.path.join(root, name))
+#             for name in dirs:
+#                 os.rmdir(os.path.join(root, name))
+#         os.rmdir(machine_folder)
+#         return jsonify({"success": True, "message": f"Machine {machine} deleted"}), 200
+#     return jsonify({"error": "Machine not found"}), 404
+
+
 if __name__ == '__main__':
     app.run(debug=True)
