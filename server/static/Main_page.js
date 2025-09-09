@@ -5,13 +5,12 @@ const submitMachineName = document.getElementById('submitMachineName');
 const errorMsg = document.getElementById('errorMsg');
 const yearsModal = document.getElementById('yearsModal');
 const yearsList = document.getElementById('yearsList');
-const archiveContainer = document.getElementById("archive-results");
+const archiveContainer = document.getElementById('archive-results');
 const btnYears = document.getElementById('get_years');
 
-// --- Load saved machines from localStorage ---
 function loadSavedMachines() {
     let machines = JSON.parse(localStorage.getItem('machines')) || [];
-    machinesList.innerHTML = "";
+    machinesList.innerHTML = '';
     machines.forEach(name => {
         const option = document.createElement('option');
         option.value = name;
@@ -20,113 +19,97 @@ function loadSavedMachines() {
 }
 loadSavedMachines();
 
-// --- Submit machine name ---
 submitMachineName.addEventListener('click', async () => {
     const machineName = machineNameInput.value.trim();
     if (!machineName) {
         errorMsg.style.display = 'block';
         return;
     }
-
     try {
         const response = await fetch(`http://127.0.0.1:5000/data/${machineName}/years`);
         if (!response.ok) {
-            console.error("Error from server:", await response.text());
             errorMsg.style.display = 'block';
             return;
         }
-
         const years = await response.json();
-        console.log("Years:", years);
-
-        // Save machine
         let machines = JSON.parse(localStorage.getItem('machines')) || [];
         if (!machines.includes(machineName)) {
             machines.push(machineName);
             localStorage.setItem('machines', JSON.stringify(machines));
         }
-
         modal.style.display = 'none';
-    } catch (error) {
-        console.error("Fetch error:", error);
+    } catch (e) {
+        errorMsg.style.display = 'block';
     }
 });
 
-// Enter key submits machine name
-machineNameInput.addEventListener('keypress', (e) => {
+machineNameInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') submitMachineName.click();
 });
 
-// --- Display archive results helper ---
+const archiveData = [
+    {date: '2025-08-31', time: '13:00', content: 'Content item 1'},
+    {date: '2025-08-31', time: '14:30', content: 'Content item 2'},
+    {date: '2025-08-30', time: '10:15', content: 'Content item 3'},
+    {date: '2025-08-29', time: '09:00', content: 'Content item 4'}
+];
+
 function displayResults(results) {
-    archiveContainer.innerHTML = "";
+    archiveContainer.innerHTML = '';
     if (results.length === 0) {
-        archiveContainer.innerHTML = "<p>No results found</p>";
+        archiveContainer.innerHTML = '<p>No results found</p>';
         return;
     }
     results.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "archive-item";
+        const div = document.createElement('div');
+        div.className = 'archive-item';
         div.innerHTML = `<strong>${item.date} ${item.time}</strong> - ${item.content}`;
         archiveContainer.appendChild(div);
     });
 }
 
-// --- Search button ---
-document.getElementById("search-button").addEventListener("click", () => {
-    const startDate = document.getElementById("start-date").value;
-    const startTime = document.getElementById("start-time").value || "00:00";
-    const endDate = document.getElementById("end-date").value;
-    const endTime = document.getElementById("end-time").value || "23:59";
-
+document.getElementById('search-button').addEventListener('click', () => {
+    const startDate = document.getElementById('start-date').value;
+    const startTime = document.getElementById('start-time').value || '00:00';
+    const endDate = document.getElementById('end-date').value;
+    const endTime = document.getElementById('end-time').value || '23:59';
+    if (!startDate || !endDate) {
+        displayResults([]);
+        return;
+    }
     const startDateTime = new Date(`${startDate}T${startTime}`);
     const endDateTime = new Date(`${endDate}T${endTime}`);
-
     const filtered = archiveData.filter(item => {
         const itemDateTime = new Date(`${item.date}T${item.time}`);
         return itemDateTime >= startDateTime && itemDateTime <= endDateTime;
     });
-
     displayResults(filtered);
 });
 
-// --- Get years for machine ---
 btnYears.addEventListener('click', async () => {
     const machineName = machineNameInput.value.trim();
     if (!machineName) {
         errorMsg.style.display = 'block';
         return;
     }
-
     try {
         const response = await fetch(`http://127.0.0.1:5000/data/${machineName}/years`);
         if (!response.ok) {
-            console.error("Error fetching years:", await response.text());
             errorMsg.style.display = 'block';
             return;
         }
-
         const years = await response.json();
-        yearsList.innerHTML = "";
-
+        yearsList.innerHTML = '';
         years.forEach(year => {
             const li = document.createElement('li');
             li.textContent = year;
-
             li.addEventListener('click', async () => {
-                // Remove active from all years
                 document.querySelectorAll('#yearsList li').forEach(el => el.classList.remove('active'));
                 li.classList.add('active');
-
                 try {
                     const respMonths = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/months`);
-                    if (!respMonths.ok) {
-                        console.error("Error fetching months:", await respMonths.text());
-                        return;
-                    }
-
+                    if (!respMonths.ok) return;
                     const months = await respMonths.json();
-
                     yearsModal.innerHTML = `
                         <h3>Months for ${year}</h3>
                         <div id="monthsContainer">
@@ -134,86 +117,45 @@ btnYears.addEventListener('click', async () => {
                         </div>
                         <div id="dayContainer"></div>
                     `;
-
-                    // --- Month buttons ---
                     document.querySelectorAll('.month-btn').forEach(monthBtn => {
                         monthBtn.addEventListener('click', async () => {
                             const month = monthBtn.textContent;
-
-                            // Remove active from all months
                             document.querySelectorAll('.month-btn').forEach(el => el.classList.remove('active'));
                             monthBtn.classList.add('active');
-
                             try {
                                 const respDays = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/${month}/days`);
-                                if (!respDays.ok) {
-                                    console.error("Error fetching days:", await respDays.text());
-                                    return;
-                                }
-
+                                if (!respDays.ok) return;
                                 const days = await respDays.json();
-
+                                const dayButtons = days.map(day => `<button class="day-btn" style="padding:5px 10px; border-radius:5px; border:1px solid #333; cursor:pointer;">${day}</button>`).join('');
                                 yearsModal.innerHTML = `
                                     <h3>Days for ${year}-${month}</h3>
-                                    <div id="dayContainer" style="display:flex; gap:5px; flex-wrap:wrap;">
-                                        ${days.map(day => `<button class="day-btn" style="padding:5px 10px; border-radius:5px; border:1px solid #333; cursor:pointer;">${day}</button>`).join('')}
+                                    <div id="dayContainer" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px;">
+                                        ${dayButtons}
                                     </div>
+                                    <pre id="dayContent" style="background:#f0f0f0; padding:10px; border-radius:5px; max-height:240px; overflow:auto;"></pre>
                                 `;
-
-                                // --- Day buttons ---
                                 document.querySelectorAll('.day-btn').forEach(dayBtn => {
                                     dayBtn.addEventListener('click', async () => {
                                         const day = dayBtn.textContent;
-
-                                        // Remove active from all days
                                         document.querySelectorAll('.day-btn').forEach(el => el.classList.remove('active'));
                                         dayBtn.classList.add('active');
-
                                         try {
                                             const respDayData = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/${month}/${day}`);
-                                            if (!respDayData.ok) {
-                                                console.error("Error fetching day data:", await respDayData.text());
-                                                return;
-                                            }
-
-                                            const dayContent = await respDayData.json();
-                                            const dayContainer = document.getElementById('dayContainer');
-                                            console.log(dayContent)
-                                            console.log(dayContent['content']);
-                                                
-
-                                            dayContainer.innerHTML = `
-                                            <pre style="background:#f0f0f0; padding:10px; border-radius:5px;">
-                                                ${JSON.stringify(dayContent['content'], null, 2)}
-                                            </pre>
-                                        `;
-
-                                            
-                                            dayContainer.innerText = `<h2>${json(dayContent['content'])}</h2>`;
-                                            //`<pre style="background:#f0f0f0; padding:10px; border-radius:5px;">${json(dayContent['content'])}</pre>`;
-
-                                        } catch (error) {
-                                            //console.log("Error fetching day data:");
-                                        }
+                                            if (!respDayData.ok) return;
+                                            const txt = await respDayData.text();
+                                            const safe = txt.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+                                            const pre = document.getElementById('dayContent');
+                                            if (pre) pre.innerHTML = safe;
+                                        } catch (e) {}
                                     });
                                 });
-
-                            } catch (error) {
-                                console.error("Error fetching month data:", error);
-                            }
+                            } catch (e) {}
                         });
                     });
-
-                } catch (error) {
-                    console.error("Error fetching months:", error);
-                }
+                } catch (e) {}
             });
-
             yearsList.appendChild(li);
         });
-
         yearsModal.style.display = 'block';
-    } catch (error) {
-        console.error("Network or code error:", error);
-    }
+    } catch (e) {}
 });
