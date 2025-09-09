@@ -217,3 +217,99 @@ btnYears.addEventListener('click', async () => {
         console.error("Network or code error:", error);
     }
 });
+const selct = document.getElementById('list') 
+
+selct.addEventListener('click', () => {
+    dropdown.classList.toggle("show");
+    selct.classList = machinesList
+  });
+
+document.getElementById("search-button").addEventListener("click", async () => {
+    const startDate = document.getElementById("start-date").value;
+    const endDate = document.getElementById("end-date").value;
+    const startTime = document.getElementById("start-time").value || "00:00:00";
+    const endTime = document.getElementById("end-time").value || "23:59:59";
+
+    if (!startDate || !endDate) {
+        alert("אנא מלא תאריכים התחלה וסיום");
+        return;
+    }
+
+    const start = `${startDate}T${startTime}`;
+    const end = `${endDate}T${endTime}`;
+
+    try {
+        const resp = await fetch(`http://127.0.0.1:5000/api/search/${start}/${end}`);
+        if (!resp.ok) throw new Error(await resp.text());
+        const data = await resp.json();
+
+        
+        let html = `<h3>תוצאות חיפוש: ${start} עד ${end}</h3>`;
+        if (data.length === 0) {
+            html += "<p>לא נמצאו תוצאות</p>";
+        } else {
+            html += `
+            <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                <thead>
+                    <tr>
+                        <th>מכונה</th>
+                        <th>תאריך ושעה</th>
+                        <th>תוכן</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(item => `
+                        <tr>
+                            <td>${item.machine}</td>
+                            <td>${item.datetime}</td>
+                            <td>${item.content}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>`;
+        }
+
+        const container = document.getElementById("archive-results");
+        container.innerHTML = html;
+
+    } catch (err) {
+        console.error("שגיאת חיפוש:", err);
+        alert("קרתה שגיאה בעת בקשת החיפוש");
+    }
+});
+
+const button = document.getElementById('machines_list');
+const dropdown = document.getElementById('machines_dropdown');
+const output = document.getElementById('machines_output');
+const arrow = document.getElementById('arrow');
+
+button.addEventListener('click', function() {
+    if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+        arrow.classList.remove('open');
+        return;
+    }
+
+    fetch('/machines')
+        .then(response => response.json())
+        .then(data => {
+            output.innerHTML = '';
+            data.forEach(machine => {
+                const li = document.createElement('li');
+                li.textContent = machine;
+                output.appendChild(li);
+            });
+
+            dropdown.classList.add('show');
+            arrow.classList.add('open');
+        })
+        .catch(error => console.error('Error:', error));
+});
+
+// סוגר את ה-dropdown אם לוחצים מחוץ
+document.addEventListener('click', function(event) {
+    if (!dropdown.contains(event.target) && event.target !== button) {
+        dropdown.classList.remove('show');
+        arrow.classList.remove('open');
+    }
+});

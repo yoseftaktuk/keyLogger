@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21dd55b2-a260-4269-a5fe-57e0f565819c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyLogger.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyLoggerManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/KeyLoggerManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/iwriter.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwriter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/desktop.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/static/Main_page.css" beforeDir="false" afterPath="$PROJECT_DIR$/server/static/Main_page.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/static/Main_page.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/static/Main_page.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/templates/Main_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/server/templates/Main_page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/text.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +47,8 @@
     "Python.app.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#1 on yosef-taktuk",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/Yosef/keylogger_porject/keyLogger"
   }
 }]]></component>
