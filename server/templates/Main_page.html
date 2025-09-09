@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='Main_page.css') }}">
 </head>
 <body>
-
-
-
     <div class="modal-overlay" id="machineNameModal">
         <div class="modal">
             <h3>Select or Enter Machine Name</h3>
@@ -21,10 +18,8 @@
         </div>
     </div>
 
-
-
-    
     <div class="categories-bar">
+
         <div style="position: relative; display: inline-block;">
             <button class="category" id="machines_list">
                 Machines List <span id="arrow">&#9662;</span>
@@ -36,19 +31,28 @@
             <!-- <div id="current_machine" class="current-machine">Current Machine: None</div> -->
         </div>
         <button id="get_years" class="category">years</button>
+
+        
+
         <button class="category">Language</button>
         <a href="http://127.0.0.1:5000/live" class="live-button">
             LIVE
             <span class="live-dot"></span>
         </a>
+
         <button id="list" class="category">Machine deletion</button>
+
+       
+
         <button class="category">Source/Website</button>
-        <button class="category">@email</button>
+        <button class="category"><self-destruction>self-destruction</self-destruction></button>
     </div>
 
     <div class="right-side">
         <h2>Archive</h2>
+
         <div class="search-form">
+            <img class="search-icon left" src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt="icon">
             <div class="search-row">
                 <label for="start-date">Start Date:</label>
                 <input type="date" id="start-date">
@@ -62,15 +66,21 @@
                 <input type="time" id="end-time">
             </div>
             <button class="search-button" id="search-button">Search</button>
+            <img class="search-icon right" src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt="icon">
         </div>
+
         <div class="archive-results" id="archive-results"></div>
     </div>
-  <div id="yearsModal" class="years-modal" style="display:none;">
+
+    <div id="yearsModal" class="years-modal" style="display:none;">
         <h4>Years</h4>
         <ul id="yearsList"></ul>
     </div>
+<<<<<<< HEAD
     <h3 style="color: aliceblue;" ></h3>
     <!-- <img src="https://img.freepik.com/premium-photo/mask-those-used-by-anonymous-with-black-cloth-black-background_449839-879.jpg" alt=""> -->
+=======
+>>>>>>> refs/remotes/origin/main
 
     <script src="{{ url_for('static', filename='Main_page.js') }}"></script>
 </body>

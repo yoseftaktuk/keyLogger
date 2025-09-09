@@ -67,7 +67,7 @@ body, html {
     border: none;
 }
 
-.category:hover , .search-button:hover {
+.category:hover, .search-button:hover {
     background-color: #FF0000;
     transform: scale(1.1);
 }
@@ -113,6 +113,7 @@ body, html {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    min-height: calc(100vh - 90px);
 }
 
 .right-side h2 {
@@ -122,11 +123,23 @@ body, html {
 }
 
 .search-form {
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     gap: 15px;
-    margin-bottom: 30px;
+    margin: 0 auto 30px auto;
+    padding: 30px 105px;
+    background: #1C1C1C;
+    border: 3px solid #00FF7F;
+    border-radius: 18px;
+    width: fit-content;
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
@@ -134,79 +147,133 @@ body, html {
     color: #ffffff;
     font-weight: bold;
     margin-right: 5px;
+    font-size: 24px;
 }
 
 .search-form input {
-    padding: 12px 15px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: 2px solid #00FF7F;
-    background-color: #1C1C1C;
+    padding: 18px 22px;
+    font-size: 24px;
+    border-radius: 15px;
+    border: 3px solid #00FF7F;
+    background-color: #0A0A0A;
     color: #00FF7F;
     outline: none;
     box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
     transition: all 0.3s ease;
-    position: relative;
 }
 
 .search-form input:focus {
     border-color: #FF0000;
-    box-shadow: 0 0 15px rgba(255,0,0,0.7), inset 0
-
+    box-shadow: 0 0 20px rgba(255,0,0,0.7), inset 0 2px 5px rgba(0,0,0,0.5);
 }
-/* חלון השנים */
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    object-fit: cover;
+    transform: translateY(-50%);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.4);
+}
+
+.search-icon.left {
+    left: 39px;
+}
+
+.search-icon.right {
+    right: 39px;
+}
+
+.archive-results {
+    color: #00FF7F;
+    display: flex;
+    flex-direction: column;
+    gap: 33px;
+    font-size: 40px;
+}
+
+.archive-item {
+    background-color: #111;
+    padding: 33px;
+    border-radius: 22px;
+    font-size: 40px;
+    color: #00FF7F;
+    box-shadow: 0 5px 22px rgba(255,0,0,0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.archive-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 33px rgba(255,0,0,0.5);
+}
+
+.archive-item button,
+.archive-item input,
+.archive-item img {
+    font-size: 36px;
+    padding: 18px 27px;
+    border-radius: 14px;
+    width: 150%;
+    height: auto;
+}
+
 .years-modal {
-    position: absolute;   
-    bottom: 20px;             /* מתחת לתמונה */
-    left: 50%;                
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
     transform: translateX(-50%);
-    background-color: #ffffff;  /* רקע לבן נקי */
+    background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 12px;       /* עיגול פינות */
-    padding: 20px 25px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); /* הצללה מודרנית */
-    width: 360px;              /* רוחב מספיק */
-    max-height: 320px;         /* גבול גובה + גלילה */
+    border-radius: 12px;
+    padding: 30px 38px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    width: 540px;
+    max-height: 480px;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1000;
-    font-family: 'Arial', sans-serif;
-    font-size: 16px;
-    transition: all 0.3s ease; /* אנימציה קלה בפתיחה */
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* כותרת בתוך החלון */
 .years-modal h4 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
+    margin: 0 0 15px 0;
+    font-size: 27px;
     color: #333333;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
+    padding-bottom: 8px;
 }
 
-/* רשימת השנים */
 .years-modal ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-/* כל פריט ברשימה */
 .years-modal li {
-    padding: 10px 8px;
-    margin-bottom: 5px;
-    background-color: #f5f7fa;   /* צבע רקע פריט */
-    border-radius: 6px;
+    padding: 15px 12px;
+    margin: 0;
+    background-color: #f5f7fa;
+    border-radius: 9px;
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: normal;
 }
 
-/* אפקט hover על הפריט */
 .years-modal li:hover {
     background-color: #4a90e2;
     color: white;
     font-weight: bold;
 }
+
 
 .dropdown {
       position: relative;
@@ -320,3 +387,5 @@ body, html {
 #machines_output li:hover {
     background-color: #f0f0f0;
 }
+
+
