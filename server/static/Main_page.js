@@ -116,38 +116,38 @@ btnYears.addEventListener('click', async () => {
                             ${months.map(m => `<button class="month-btn">${m}</button>`).join('')}
                         </div>
                         <div id="dayContainer"></div>
-                    `;
-                    document.querySelectorAll('.month-btn').forEach(monthBtn => {
-                        monthBtn.addEventListener('click', async () => {
-                            const month = monthBtn.textContent;
-                            document.querySelectorAll('.month-btn').forEach(el => el.classList.remove('active'));
-                            monthBtn.classList.add('active');
-                            try {
-                                const respDays = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/${month}/days`);
-                                if (!respDays.ok) return;
-                                const days = await respDays.json();
-                                const dayButtons = days.map(day => `<button class="day-btn" style="padding:5px 10px; border-radius:5px; border:1px solid #333; cursor:pointer;">${day}</button>`).join('');
-                                yearsModal.innerHTML = `
-                                    <h3>Days for ${year}-${month}</h3>
-                                    <div id="dayContainer" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px;">
-                                        ${dayButtons}
-                                    </div>
-                                    <pre id="dayContent" style="background:#f0f0f0; padding:10px; border-radius:5px; max-height:240px; overflow:auto;"></pre>
-                                `;
-                                document.querySelectorAll('.day-btn').forEach(dayBtn => {
-                                    dayBtn.addEventListener('click', async () => {
-                                        const day = dayBtn.textContent;
-                                        document.querySelectorAll('.day-btn').forEach(el => el.classList.remove('active'));
-                                        dayBtn.classList.add('active');
-                                        try {
-                                            const respDayData = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/${month}/${day}`);
-                                            if (!respDayData.ok) return;
-                                            const txt = await respDayData.text();
-                                            const safe = txt.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
-                                            const pre = document.getElementById('dayContent');
-                                            if (pre) pre.innerHTML = safe;
-                                        } catch (e) {}
-                                    });
+                `;
+    document.querySelectorAll('.month-btn').forEach(monthBtn => {
+        monthBtn.addEventListener('click', async () => {
+    const month = monthBtn.textContent;
+    document.querySelectorAll('.month-btn').forEach(el => el.classList.remove('active'));
+    monthBtn.classList.add('active');
+    try {
+        const respDays = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/${month}/days`);
+        if (!respDays.ok) return;
+        const days = await respDays.json();
+        const dayButtons = days.map(day => `<button class="day-btn" style="padding:5px 10px; border-radius:5px; border:1px solid #333; cursor:pointer;">${day}</button>`).join('');
+        yearsModal.innerHTML = `
+            <h3>Days for ${year}-${month}</h3>
+            <div id="dayContainer" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px;">
+                ${dayButtons}
+            </div>
+            <pre id="dayContent" style="background:#f0f0f0; padding:10px; border-radius:5px; max-height:240px; overflow:auto;"></pre>
+        `;
+        document.querySelectorAll('.day-btn').forEach(dayBtn => {
+            dayBtn.addEventListener('click', async () => {
+                            const day = dayBtn.textContent;
+        document.querySelectorAll('.day-btn').forEach(el => el.classList.remove('active'));
+        dayBtn.classList.add('active');
+        try {
+            const respDayData = await fetch(`http://127.0.0.1:5000/data/${machineName}/${year}/${month}/${day}`);
+            if (!respDayData.ok) return;
+            const txt = await respDayData.text();
+            const safe = txt.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+            const pre = document.getElementById('dayContent');
+            if (pre) pre.innerHTML = safe;
+                    } catch (e) {}
+                });
                                 });
                             } catch (e) {}
                         });

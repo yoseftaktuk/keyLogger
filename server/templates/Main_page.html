@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive & Live</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='Main_page.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
 </head>
 <body>
     <div class="modal-overlay" id="machineNameModal">
@@ -18,36 +18,31 @@
         </div>
     </div>
 
-    <div class="categories-bar">
-
-        <div style="position: relative; display: inline-block;">
-            <button class="category" id="machines_list">
-                Machines List <span id="arrow">&#9662;</span>
-            </button>
-
-            <div id="machines_dropdown">
-                <ul id="machines_output"></ul>
-            </div>
-            <!-- <div id="current_machine" class="current-machine">Current Machine: None</div> -->
-        </div>
-        <button id="get_years" class="category">years</button>
-
-        
-
-        <button class="category">Language</button>
-        <a href="http://127.0.0.1:5000/live" class="live-button">
-            LIVE
-            <span class="live-dot"></span>
-        </a>
-
-        <button id="list" class="category">Machine deletion</button>
-
-       
-
-        <button class="category">Source/Website</button>
-        
-        <button class="category"><self-destruction>self-destruction</self-destruction></button>
+<div class="dropdown">
+    <button class="category">Machines List ▼</button>
+    <div class="dropdown-content">
+        <ul id="machines_output"></ul>
     </div>
+</div>
+
+    <button id="get_years" class="category">Years</button>
+    <button class="category">Language</button>
+
+    <a href="http://127.0.0.1:5000/live" class="live-button">
+        LIVE <span class="live-dot"></span>
+    </a>
+
+    <!-- כפתור אפשרויות נוספות -->
+    <div class="dropdown">
+        <button class="category">אפשרויות נוספות ▼</button>
+        <div class="dropdown-content">
+            <button id="list" class="dropdown-item">Machine deletion</button>
+            <button id="self-destruction" class="dropdown-item">Self-destruction</button>
+        </div>
+    </div>
+
+    <button class="category">Source/Website</button>
+</div>
 
     <div class="right-side">
         <h2>Archive</h2>

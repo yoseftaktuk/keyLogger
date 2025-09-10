@@ -1,0 +1,183 @@
+/* עיצוב כללי */
+body {
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* כותרות */
+h2, h3, h4 {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+/* מודאל */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    width: 350px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* כפתורים כלליים */
+button, .live-button {
+    background: #2c7be5;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+button:hover, .live-button:hover {
+    background: #1a5bb8;
+}
+
+/* בר הקטגוריות */
+.categories-bar {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+/* קישורים */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* כפתור live */
+.live-button {
+    position: relative;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: red;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* צד ימין – תוצאות ארכיון */
+.right-side {
+    padding: 20px;
+}
+
+.search-form {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.search-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.search-row label {
+    flex: 1;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.search-row input {
+    flex: 2;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* תוצאות */
+.archive-results {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    min-height: 150px;
+}
+
+/* רשימת שנים */
+.years-modal {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px;
+}
+
+/* dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #e1adad;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    min-width: 180px;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    visibility:visible;
+}
+
+.dropdown-content ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-content ul li {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.dropdown-content ul li:hover {
+    background: #f0f0f0;
+}
+
+/* הצגה כאשר העכבר על הכפתור */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
