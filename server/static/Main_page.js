@@ -1,3 +1,5 @@
+// ----------------- Main JS for Archive & Live -----------------
+
 const modal = document.getElementById('machineNameModal');
 const machineNameInput = document.getElementById('machineNameInput');
 const machinesList = document.getElementById('machinesList');
@@ -8,6 +10,7 @@ const yearsList = document.getElementById('yearsList');
 const archiveContainer = document.getElementById('archive-results');
 const btnYears = document.getElementById('get_years');
 
+// Load saved machine names
 function loadSavedMachines() {
     let machines = JSON.parse(localStorage.getItem('machines')) || [];
     machinesList.innerHTML = '';
@@ -19,6 +22,7 @@ function loadSavedMachines() {
 }
 loadSavedMachines();
 
+// Submit machine name
 submitMachineName.addEventListener('click', async () => {
     const machineName = machineNameInput.value.trim();
     if (!machineName) {
@@ -31,7 +35,6 @@ submitMachineName.addEventListener('click', async () => {
             errorMsg.style.display = 'block';
             return;
         }
-        const years = await response.json();
         let machines = JSON.parse(localStorage.getItem('machines')) || [];
         if (!machines.includes(machineName)) {
             machines.push(machineName);
@@ -47,6 +50,7 @@ machineNameInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') submitMachineName.click();
 });
 
+// Sample archive data
 const archiveData = [
     {date: '2025-08-31', time: '13:00', content: 'Content item 1'},
     {date: '2025-08-31', time: '14:30', content: 'Content item 2'},
@@ -68,6 +72,7 @@ function displayResults(results) {
     });
 }
 
+// Search button
 document.getElementById('search-button').addEventListener('click', () => {
     const startDate = document.getElementById('start-date').value;
     const startTime = document.getElementById('start-time').value || '00:00';
@@ -86,6 +91,7 @@ document.getElementById('search-button').addEventListener('click', () => {
     displayResults(filtered);
 });
 
+// Years button
 btnYears.addEventListener('click', async () => {
     const machineName = machineNameInput.value.trim();
     if (!machineName) {
@@ -94,10 +100,7 @@ btnYears.addEventListener('click', async () => {
     }
     try {
         const response = await fetch(`http://127.0.0.1:5000/data/${machineName}/years`);
-        if (!response.ok) {
-            errorMsg.style.display = 'block';
-            return;
-        }
+        if (!response.ok) { errorMsg.style.display = 'block'; return; }
         const years = await response.json();
         yearsList.innerHTML = '';
         years.forEach(year => {
@@ -112,9 +115,7 @@ btnYears.addEventListener('click', async () => {
                     const months = await respMonths.json();
                     yearsModal.innerHTML = `
                         <h3>Months for ${year}</h3>
-                        <div id="monthsContainer">
-                            ${months.map(m => `<button class="month-btn">${m}</button>`).join('')}
-                        </div>
+                        <div id="monthsContainer">${months.map(m => `<button class="month-btn">${m}</button>`).join('')}</div>
                         <div id="dayContainer"></div>
                 `;
     document.querySelectorAll('.month-btn').forEach(monthBtn => {
@@ -149,15 +150,15 @@ btnYears.addEventListener('click', async () => {
                     } catch (e) {}
                 });
                                 });
-                            } catch (e) {}
+                            } catch(e){}
                         });
                     });
-                } catch (e) {}
+                } catch(e){}
             });
             yearsList.appendChild(li);
         });
         yearsModal.style.display = 'block';
-    } catch (e) {}
+    } catch(e){}
 });
 
   

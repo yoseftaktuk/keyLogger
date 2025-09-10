@@ -171,14 +171,18 @@ def delete_machine_data(machine):
 
 @app.route("/data/delete_all", methods=["DELETE"])
 def delete_all_data():
-    if os.path.exists(DATA_FOLDER):
-        for root, dirs, files in os.walk(DATA_FOLDER, topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                os.rmdir(os.path.join(root, name))
-        return True
-    return False
+    try:
+        if os.path.exists(DATA_FOLDER):
+            for root, dirs, files in os.walk(DATA_FOLDER, topdown=False):
+                for name in files:
+                    os.remove(os.path.join(root, name))
+                for name in dirs:
+                    os.rmdir(os.path.join(root, name))
+            return jsonify({"success": True, "message": "All data deleted."}), 200
+        else:
+            return jsonify({"success": False, "message": "Data folder not found."}), 404
+    except Exception as e:
+        return jsonify({"success": False, "message": f"Error occurred: {str(e)}"}), 500
 
 
 import shutil
@@ -337,6 +341,31 @@ def most_frequent_word(machine, year, month,day):
 #         return jsonify({"success": True, "message": f"Machine {machine} deleted"}), 200
 #     return jsonify({"error": "Machine not found"}), 404
 
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+from flask import Flask, request, jsonify
+import re
+
+app = Flask(__name__)
+
+def extract_links(text):
+    url_pattern = r"""
+        (?:(?:https?://)|(?:www\.))?
+        [\w\-]+(?:\.[\w\-]+)+
+        (?:[\w\-\._~:/?#[\]@!$&'()*+,;=%]*)
+    """
+    matches = re.findall(url_pattern, text, re.IGNORECASE | re.VERBOSE)
+    return list(set(matches))
+
+@app.route('/extract_link', methods=['POST'])
+def extract_link():
+    data = request.json
+    text = data.get('text', '')
+    links = extract_links(text)
+    return jsonify({'links': links})
 
 if __name__ == '__main__':
     app.run(debug=True)
